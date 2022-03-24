@@ -1,0 +1,12 @@
+{
+      "editor.fontFamily": "FiraCodeNerdFontCompleteM-Retina, FiraCode-Retina, Fira Code, Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.formatOnSave": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "gitlens.codeLens.enabled": false
+}

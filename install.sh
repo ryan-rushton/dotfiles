@@ -9,15 +9,18 @@ xcode-select --install;
 
 # Install a bunch of things using brew
 brew install git;
-brew install --cask font-fira-code;
+brew install --cask font-fira-code-nerd-font;
 brew install --cask visual-studio-code;
 brew install --cask google-chrome;
 brew install starship;
 brew install gh;
 
 # Sym link the .zshrc file
-ln -sfv "$PWD/.zshrc" ~/.zshrc
+ln -sfv "$PWD/zsh/.zshrc" ~/.zshrc
 source "$HOME/.zshrc"
+
+# Setup vscode
+cp -f "$PWD/vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 
 # Install nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash;
