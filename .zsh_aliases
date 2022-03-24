@@ -1,0 +1,4 @@
+alias rzsh="source ~/.zshrc"
+alias ezsh="code ~/.zshrc"
+alias gclb="git branch --merged master | egrep -v \"(^\*|master|dev|main|green)\" | cut -d/ -f2- | xargs -n 1 git branch -d"
+alias gph="git push -u origin HEAD"
