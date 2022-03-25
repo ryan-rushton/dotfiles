@@ -14,6 +14,7 @@ brew install --cask visual-studio-code;
 brew install --cask google-chrome;
 brew install starship;
 brew install gh;
+brew install zsh-autosuggestions
 
 # Sym link the .zshrc file
 ln -sfv "$PWD/zsh/.zshrc" ~/.zshrc
