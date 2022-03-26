@@ -17,13 +17,13 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 # Setup autosuggestions
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-
-# Enable fuzzy search
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Setup history substring searching
 source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Enable fuzzy search
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Enable starship (must go last)
 eval "$(starship init zsh)"
