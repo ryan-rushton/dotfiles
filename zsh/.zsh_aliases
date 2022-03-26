@@ -1,4 +1,14 @@
-alias reload_zsh="source ~/.zshrc"
+# Zsh aliases
 alias edit_zsh="code ~/.zshrc"
+alias reload_zsh="source ~/.zshrc"
+
+# Git aliases
+alias ga="git add"
 alias gclb="git branch --merged master | egrep -v \"(^\*|master|dev|main|green)\" | cut -d/ -f2- | xargs -n 1 git branch -d"
-alias gph="git push -u origin HEAD"
+alias gcm="git commit -m"
+alias gph="git push"
+alias gpl="git pull"
+alias gpoh="git push -u origin HEAD"
+alias gr="git rebase"
+alias gri="git rebase --interactive"
+alias gs="git status"
