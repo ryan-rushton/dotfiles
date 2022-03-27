@@ -1,5 +1,13 @@
 #!/bin/zsh
 
+if [[ "$TERM_PROGRAM" != "Apple_Terminal" ]]; then
+  echo "Please use the default apple terminal, we restart other programs during install and this may interupt the install."
+  exit 0
+fi
+
+# Ask for the administrator password upfront
+sudo -v
+
 # Install homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)";
 eval "$(/opt/homebrew/bin/brew shellenv)";
@@ -32,9 +40,13 @@ ln -svf "$PWD/zsh/.zshrc" "$HOME/.zshrc";
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
 
+# Sets osx defaults
+source "$PWD/osx/.osx"
+
+# Load zsh settings
 source "$HOME/.zshrc"
 
 # Setup vscode
-cp -f "$PWD/vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json";
+ln -svf "$PWD/vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json";
 
-echo 'Close and reopen your terminal.'
+echo 'Please close and reopen your terminal.'
