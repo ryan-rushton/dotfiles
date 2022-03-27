@@ -12,7 +12,6 @@ sudo -v
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash;
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")";
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
-nvm install node;
 
 # Update brew
 brew update
@@ -26,11 +25,15 @@ ln -svf "$PWD/zsh/.zshrc" "$HOME/.zshrc";
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
 
 # Sets osx defaults
-source "$PWD/osx/.osx"
+source "$PWD/osx/.defaults"
 
+# Setup git defaults
+source "$PWD/git/.config"
+
+# Load zsh settings
 source "$HOME/.zshrc"
 
 # Setup vscode
-cp -f "$PWD/vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json";
+ln -svf "$PWD/vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json";
 
-echo 'Please close and reopen your terminal.'
+echo 'Please restart your terminal.'

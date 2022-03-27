@@ -29,8 +29,9 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 # Four-letter codes for the other view modes: `icnv`, `Nlmv`, `glyv`
 defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 
+# TODO this isn't working
 # Show the ~/Library folder
-chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+# chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
 
 # Show the /Volumes folder
 sudo chflags nohidden /Volumes

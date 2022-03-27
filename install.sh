@@ -19,19 +19,23 @@ xcode-select --install;
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash;
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")";
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
+
+# Install latest node
 nvm install node;
 
 # Install a bunch of things using brew
-brew install git;
-brew install --cask font-fira-code-nerd-font;
-brew install --cask visual-studio-code;
-brew install --cask google-chrome;
-brew install starship;
+brew install fzf;
 brew install gh;
+brew install git;
+brew install starship;
+brew install yarn;
 brew install zsh-autosuggestions;
 brew install zsh-history-substring-search;
-brew install fzf;
-brew install yarn;
+brew install --cask font-fira-code-nerd-font;
+brew install --cask google-chrome;
+brew install --cask jetbrains-toolbox
+brew install --cask sourcetree
+brew install --cask visual-studio-code;
 
 # Sym link the zsh files
 ln -svf "$PWD/zsh/.zsh_aliases" "$HOME/.zsh_aliases";
@@ -41,7 +45,10 @@ ln -svf "$PWD/zsh/.zshrc" "$HOME/.zshrc";
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
 
 # Sets osx defaults
-source "$PWD/osx/.osx"
+source "$PWD/osx/.defaults"
+
+# Setup git defaults
+source "$PWD/git/.config"
 
 # Load zsh settings
 source "$HOME/.zshrc"
@@ -49,4 +56,4 @@ source "$HOME/.zshrc"
 # Setup vscode
 ln -svf "$PWD/vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json";
 
-echo 'Please close and reopen your terminal.'
+echo 'Please restart your terminal.'
