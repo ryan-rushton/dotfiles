@@ -1,0 +1,9 @@
+# Setup for my starship command prompt
+
+[git_metrics]
+disabled = false
+
+[git_status]
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"

@@ -17,9 +17,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 brew update
 brew upgrade
 
-# Sym link the zsh files
-ln -svf "$PWD/zsh/.zsh_aliases" "$HOME/.zsh_aliases";
-ln -svf "$PWD/zsh/.zshrc" "$HOME/.zshrc";
+source "$PWD/update_links.sh"
 
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
@@ -29,11 +27,5 @@ source "$PWD/osx/.defaults"
 
 # Setup git defaults
 source "$PWD/git/.config"
-
-# Load zsh settings
-source "$HOME/.zshrc"
-
-# Setup vscode
-ln -svf "$PWD/vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json";
 
 echo 'Please restart your terminal.'

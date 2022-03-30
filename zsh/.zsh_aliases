@@ -4,9 +4,11 @@ alias reload_zsh="source ~/.zshrc"
 
 # Git aliases
 alias ga="git add"
-alias gclb="git fetch --prune && git branch -vv | grep 'origin/.*: gone]' | awk '{print \$1}' | xargs git branch -d"
 alias gca="git commit --append"
 alias gcm="git commit -m"
+alias gdlb="git fetch --prune && git branch -vv | grep 'origin/.*: gone]' | awk '{print \$1}' | xargs git branch -d"
+alias gdlbf="git fetch --prune && git branch -vv | grep 'origin/.*: gone]' | awk '{print \$1}' | xargs git branch -D"
+alias gfp="git fetch -p"
 alias gp="git push"
 alias gpf="git push --force"
 alias gpl="git pull"
