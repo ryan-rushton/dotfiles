@@ -33,9 +33,12 @@ brew install starship
 brew install yarn
 brew install zsh-autosuggestions
 brew install zsh-history-substring-search
+brew install --cask 1password
+brew install --cask discord
 brew install --cask font-fira-code-nerd-font
 brew install --cask google-chrome
 brew install --cask jetbrains-toolbox
+brew install --cask slack
 brew install --cask sourcetree
 brew install --cask visual-studio-code
 
