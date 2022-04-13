@@ -1,13 +1,14 @@
+#!/bin/bash
+
 # Zsh aliases
 alias edit_zsh="code ~/.zshrc"
 alias reload_zsh="source ~/.zshrc"
 
 # Git aliases
 alias ga="git add"
-alias gca="git commit --append"
+alias gca="git commit --amend"
 alias gcm="git commit -m"
-alias gdlb="git fetch --prune && git branch -vv | grep 'origin/.*: gone]' | awk '{print \$1}' | xargs git branch -d"
-alias gdlbf="git fetch --prune && git branch -vv | grep 'origin/.*: gone]' | awk '{print \$1}' | xargs git branch -D"
+alias gco="git checkout"
 alias gfp="git fetch -p"
 alias gp="git push"
 alias gpf="git push --force"
@@ -16,3 +17,6 @@ alias gpoh="git push -u origin HEAD"
 alias gr="git rebase"
 alias gri="git rebase --interactive"
 alias gs="git status"
+
+alias gclb="git fetch --prune && git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -d"
+alias gdlbf="git fetch --prune && git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -D"
