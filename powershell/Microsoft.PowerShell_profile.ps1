@@ -86,3 +86,6 @@ function _gs() {
     git status $args
 }
 New-Alias -Name gs -Value _gs
+
+
+Invoke-Expression (&starship init powershell)
