@@ -42,7 +42,7 @@ brew install --cask slack
 brew install --cask sourcetree
 brew install --cask visual-studio-code
 
-source "$PWD/update_links.sh"
+source "$PWD/update_links_unix.sh"
 
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash

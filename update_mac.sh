@@ -17,7 +17,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 brew update
 brew upgrade
 
-source "$PWD/update_links.sh"
+source "$PWD/update_links_unix.sh"
 
 # To install useful key bindings and fuzzy completion:
 eval "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash"
