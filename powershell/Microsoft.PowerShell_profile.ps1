@@ -1,5 +1,9 @@
 Import-Module -Name Microsoft.PowerShell.Utility
 
+###############
+# Git Aliases #
+###############
+
 # Prevent conflict with built-in aliases by removing them
 $aliases = @(
     "ga",
