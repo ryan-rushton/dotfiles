@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/zsh
+# Needs to be zsh as we use zsh specific stuff
 
 if [[ "$TERM_PROGRAM" != "Apple_Terminal" ]]; then
   echo "Please use the default apple terminal, we restart other programs during install and this may interupt the install."
@@ -27,6 +28,8 @@ nvm install node
 brew install fzf
 brew install gh
 brew install git
+brew install java11
+brew install python3
 brew install shellcheck
 brew install shfmt
 brew install starship
@@ -51,7 +54,7 @@ $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no
 source "$PWD/osx/.defaults"
 
 # Setup git defaults
-source "$PWD/git/.config"
+python3 "git/setup.py"
 
 # Install vs code extensions
 source "$PWD/vscode/extensions.sh"

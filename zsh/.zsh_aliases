@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Zsh aliases
 alias edit_zsh="code ~/.zshrc"
 alias reload_zsh="source ~/.zshrc"

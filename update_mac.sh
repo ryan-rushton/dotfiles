@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/zsh
+# Needs to be zsh as we use zsh specific stuff
 
 if [[ "$TERM_PROGRAM" != "Apple_Terminal" ]]; then
   echo "Please use the default apple terminal, we restart other programs during update and this may interupt the update."
@@ -26,6 +27,6 @@ eval "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-r
 source "$PWD/osx/.defaults"
 
 # Setup git defaults
-source "$PWD/git/.config"
+python3 "git/setup.py"
 
 echo 'Please restart your terminal.'

@@ -8,4 +8,3 @@ code --install-extension Orta.vscode-jest
 code --install-extension streetsidesoftware.code-spell-checker
 code --install-extension stylelint.vscode-stylelint
 code --install-extension tamasfe.even-better-toml
-code --install-extension timonwong.shellcheck
