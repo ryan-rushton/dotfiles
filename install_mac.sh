@@ -57,6 +57,6 @@ source "$PWD/osx/.defaults"
 python3 "git/setup.py"
 
 # Install vs code extensions
-source "$PWD/vscode/extensions.sh"
+python3 "vscode/setup.py"
 
 echo 'Please restart your terminal.'
