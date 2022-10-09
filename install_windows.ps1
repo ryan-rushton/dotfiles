@@ -9,9 +9,6 @@ else {
 
 
 scoop bucket add nerd-fonts
-scoop install FiraCode
-scoop install FiraCode-NF
-scoop install FiraCode-NF-Mono
 scoop install sudo
 
 $installs = @(
@@ -51,6 +48,8 @@ winget upgrade --all
 
 # Refresh path
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User") 
+
+sudo scoop install FiraCode FiraCode-NF FiraCode-NF-Mono
 
 function addSymlink($path, $target) {
     if (-Not (Test-Path -Path $path)) {
