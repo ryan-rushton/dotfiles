@@ -27,6 +27,6 @@ eval "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-r
 source "$PWD/osx/.defaults"
 
 # Setup git defaults
-python3 "git/setup.py"
+python3 -m "git.setup"
 
 echo 'Please restart your terminal.'

@@ -9,7 +9,7 @@ ln -svf "$PWD/zsh/.zshrc" "$HOME/.zshrc"
 source "$HOME/.zshrc"
 
 # Setup starship
-python3 "starship/setup.py"
+python3 -m "starship.setup"
 
 # Setup vscode
 ln -svf "$PWD/vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"

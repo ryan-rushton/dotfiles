@@ -1,7 +1,3 @@
-import os
-import platform
-from subprocess import call
-
 # Setup user settings symlinks
 from . import link_settings
 

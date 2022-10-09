@@ -54,9 +54,9 @@ $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no
 source "$PWD/osx/.defaults"
 
 # Setup git defaults
-python3 "git/setup.py"
+python3 -m "git.setup"
 
 # Install vs code extensions
-python3 "vscode/setup.py"
+python3 -m "vscode.setup"
 
 echo 'Please restart your terminal.'

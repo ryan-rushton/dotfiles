@@ -1,14 +1,14 @@
 import os
 from subprocess import call
 
-from py_utils import utils
+from utils import path_utils
 
 
 home = os.path.expanduser('~')
 gitignore_global = os.path.join(home, ".gitignore_global")
 print(f"Creating global gitignore {gitignore_global}")
 
-utils.touch(gitignore_global)
+path_utils.touch(gitignore_global)
 
 configs = {
     "user.email": "ryan.rushton79@gmail.com",

@@ -1,7 +1,7 @@
 import os
 import platform
 
-from py_utils import utils
+from utils import path_utils
 
 
 def user_settings_location():
@@ -17,5 +17,6 @@ def user_settings_location():
         raise Exception("Unknown system")
 
 
-settings = os.path.join(utils.current_file_path(__file__), "settings.json")
-utils.symlink(settings, user_settings_location())
+settings = os.path.join(
+    path_utils.current_file_path(__file__), "settings.json")
+path_utils.symlink(settings, user_settings_location())
