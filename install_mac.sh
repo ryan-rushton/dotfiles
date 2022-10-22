@@ -47,7 +47,10 @@ brew install --cask slack
 brew install --cask sourcetree
 brew install --cask visual-studio-code
 
-source "$PWD/update_links_unix.sh"
+# Setup this project so we can run the ts files
+yarn install
+
+source "$PWD/src/update_links_unix.sh"
 
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
@@ -56,9 +59,6 @@ $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no
 source "$PWD/src/osx/.defaults"
 
 # Setup git defaults
-python3 -m "src.git.setup"
-
-# Install vs code extensions
-python3 -m "src.vscode.setup"
+yarn ts-node "$PWD/src/git/setup.ts"
 
 echo 'Please restart your terminal.'

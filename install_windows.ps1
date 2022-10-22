@@ -72,14 +72,16 @@ mkdir $HOME\Documents\PowerShell -Force
 addSymlink -path "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -target ".\src\powershell\Microsoft.PowerShell_profile.ps1"
 addSymlink -path "$HOME\Documents\PowerShell\Microsoft.VSCode_profile.ps1" -target ".\src\powershell\Microsoft.PowerShell_profile.ps1"
 
-# Setup starship config
-sudo python -m "src.starship.setup"
+yarn install
+
+# Setup starship
+sudo yarn ts-node ".\src\starship\setup.ts"
 
 # Load profile
 . $PROFILE
 
 # Setup git config
-python -m "src.git.setup"
+sudo yarn ts-node ".\src\git\setup.ts"
 
-# Setup vs code
-sudo python -m "src.vscode.setup"
+# Setup vscode
+sudo yarn ts-node ".\src\vscode\setup.ts"

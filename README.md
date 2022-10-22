@@ -4,9 +4,11 @@ My dotfiles and fresh install setup. Uses `ts` to configure a new system so it c
 
 ## Mac
 
-Pretty straight forward, the installer script should do everything needed.
+Pretty straight forward, the installer script should do everything needed. Run `./install_mac/sh`
 
 ## Windows
+
+Run `,\install_windows.ps1`.
 
 The only manual step needed after the install script has run is to install the font into settings. To do this
 

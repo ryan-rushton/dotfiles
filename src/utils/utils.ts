@@ -1,14 +1,4 @@
-import {
-  access,
-  constants,
-  mkdir as fsMkdir,
-  open,
-  rm,
-  stat,
-  symlink,
-  unlink,
-  utimes,
-} from 'node:fs/promises';
+import { access, constants, mkdir as fsMkdir, open, rm, symlink, utimes } from 'node:fs/promises'
 
 /**
  * Creates a symlink and will remove any existing symlink or file.
@@ -16,22 +6,19 @@ import {
  * @param configPath The path of the config to be symlinked
  * @param targetPath The symlink path that points back to configPath
  */
-export async function createSymlink(configPath: string, targetPath: string) {
+export async function createSymlink (configPath: string, symlinkPath: string) {
   try {
-    await access(targetPath, constants.R_OK | constants.W_OK);
-    const stats = await stat(targetPath);
-
-    if (stats.isSymbolicLink()) {
-      await unlink(targetPath);
-      console.log(`Removing existing symlink ${targetPath}`);
-    } else if (stats.isFile()) {
-      console.log(`Removing existing file ${targetPath}`);
-      await rm(targetPath);
-    }
-
-    await symlink(configPath, targetPath);
+    await rm(symlinkPath)
+    console.info(`Removed existing file ${symlinkPath}`)
   } catch (e: unknown) {
-    console.error(`Unable to create symlink for ${configPath} with target ${targetPath}.`, e);
+    console.info(`${symlinkPath} doesn't currently exist, creating new.`)
+  }
+
+  try {
+    console.info(`Creating symlink, ${symlinkPath} is linked to ${configPath}.`)
+    await symlink(configPath, symlinkPath)
+  } catch (e: unknown) {
+    console.error(`Unable to create symlink for ${configPath} with symlink ${symlinkPath}.`, e)
   }
 }
 
@@ -40,15 +27,16 @@ export async function createSymlink(configPath: string, targetPath: string) {
  *
  * @param path The path to touch
  */
-export async function touch(path: string) {
+export async function touch (path: string) {
   try {
-    const now = Date.now();
-    await access(path, constants.R_OK | constants.W_OK);
+    const now = Date.now()
+    await access(path, constants.R_OK | constants.W_OK)
     // File exists so update the timestamps
-    await utimes(path, now, now);
+    await utimes(path, now, now)
   } catch (e: unknown) {
     // File doesn't exist so create it
-    await open(path, 'a+', 'r+');
+    console.info(`Creating file ${path}`)
+    await open(path, 'a+')
   }
 }
 
@@ -58,7 +46,9 @@ export async function touch(path: string) {
  *
  * @param path Directory path to be created
  */
-export async function mkdir(path: string) {
-  const created = await fsMkdir(path, { recursive: true });
-  console.log(`Created dir ${created}`);
+export async function mkdir (path: string) {
+  const created = await fsMkdir(path, { recursive: true })
+  if (created) {
+    console.info(`Created dir ${created}`)
+  }
 }
