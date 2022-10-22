@@ -8,7 +8,7 @@ Pretty straight forward, the installer script should do everything needed. Run `
 
 ## Windows
 
-Run `,\install_windows.ps1`.
+Run `.\install_windows.ps1`.
 
 The only manual step needed after the install script has run is to install the font into settings. To do this
 
