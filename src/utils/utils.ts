@@ -1,4 +1,14 @@
-import { access, constants, rm, stat, symlink, unlink } from "node:fs/promises";
+import {
+  access,
+  constants,
+  mkdir as fsMkdir,
+  open,
+  rm,
+  stat,
+  symlink,
+  unlink,
+  utimes,
+} from 'node:fs/promises';
 
 /**
  * Creates a symlink and will remove any existing symlink or file.
@@ -20,7 +30,35 @@ export async function createSymlink(configPath: string, targetPath: string) {
     }
 
     await symlink(configPath, targetPath);
-  } catch (e) {
+  } catch (e: unknown) {
     console.error(`Unable to create symlink for ${configPath} with target ${targetPath}.`, e);
   }
+}
+
+/**
+ * A system agnostic touch function
+ *
+ * @param path The path to touch
+ */
+export async function touch(path: string) {
+  try {
+    const now = Date.now();
+    await access(path, constants.R_OK | constants.W_OK);
+    // File exists so update the timestamps
+    await utimes(path, now, now);
+  } catch (e: unknown) {
+    // File doesn't exist so create it
+    await open(path, 'a+', 'r+');
+  }
+}
+
+/**
+ * Recursive creates a directory for the provided path. If it already exists
+ * this is essentially a no-op.
+ *
+ * @param path Directory path to be created
+ */
+export async function mkdir(path: string) {
+  const created = await fsMkdir(path, { recursive: true });
+  console.log(`Created dir ${created}`);
 }

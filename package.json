@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "tsc --watch"
+    "start": "tsc --watch",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@types/node": "^18.11.3",
