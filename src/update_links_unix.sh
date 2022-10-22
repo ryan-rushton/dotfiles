@@ -2,14 +2,14 @@
 # Needs to be zsh as we use zsh specific stuff
 
 # Sym link the zsh files
-ln -svf "$PWD/zsh/.zsh_aliases" "$HOME/.zsh_aliases"
-ln -svf "$PWD/zsh/.zshrc" "$HOME/.zshrc"
+ln -svf "$PWD/src/zsh/.zsh_aliases" "$HOME/.zsh_aliases"
+ln -svf "$PWD/src/zsh/.zshrc" "$HOME/.zshrc"
 
 # Load zsh settings
 source "$HOME/.zshrc"
 
 # Setup starship
-yarn ts-node "$PWD/starship/setup.ts"
+yarn ts-node "$PWD/src/starship/setup.ts"
 
 # Setup vscode
-yarn ts-node "$PWD/vscode/setup.ts"
+yarn ts-node "$PWD/src/vscode/setup.ts"

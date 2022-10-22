@@ -18,7 +18,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 brew update
 brew upgrade
 
-source "$PWD/update_links_unix.sh"
+source "$PWD/src/update_links_unix.sh"
 
 # To install useful key bindings and fuzzy completion:
 eval "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash"
@@ -27,6 +27,6 @@ eval "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-r
 source "$PWD/src/osx/.defaults"
 
 # Setup git defaults
-python3 -m "src.git.setup"
+ts-node "src/git/setup.ts"
 
 echo 'Please restart your terminal.'
