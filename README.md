@@ -1,6 +1,6 @@
 # dotfiles
 
-My dotfiles
+My dotfiles and fresh install setup. Uses `ts` to configure a new system so it can be OS agnostic.
 
 ## Mac
 
@@ -14,3 +14,7 @@ The only manual step needed after the install script has run is to install the f
 - Click `Browse and install fonts`
 - Get desired `ttf` font files from `$HOME\scoop\apps\<font>\current`
 - Restarting terminals and or vscode should now use the desired fonts.
+
+## TODOs
+
+- Implement a Ubuntu installer
