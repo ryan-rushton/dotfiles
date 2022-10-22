@@ -1,7 +1,8 @@
 {
-  "files.eol": "\n",
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
+  "eslint.codeActionsOnSave.mode": "problems",
+  "files.eol": "\n",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

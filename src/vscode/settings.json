@@ -2,6 +2,7 @@
   "editor.fontFamily": "FiraCodeNerdFontCompleteM-Retina, FiraCode-Retina, Fira Code, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
   "editor.formatOnSave": true,
+  "eslint.codeActionsOnSave.mode": "problems",
   "files.eol": "\n",
   "gitlens.codeLens.enabled": false,
   "[javascript]": {

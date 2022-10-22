@@ -85,3 +85,5 @@ sudo yarn ts-node ".\src\git\setup.ts"
 
 # Setup vscode
 sudo yarn ts-node ".\src\vscode\setup.ts"
+
+& $profile
