@@ -24,9 +24,9 @@ source "$PWD/update_links_unix.sh"
 eval "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash"
 
 # Sets osx defaults
-source "$PWD/osx/.defaults"
+source "$PWD/src/osx/.defaults"
 
 # Setup git defaults
-python3 -m "git.setup"
+python3 -m "src.git.setup"
 
 echo 'Please restart your terminal.'

@@ -22,7 +22,10 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # Install latest node
-nvm install node
+nvm install latest
+
+# Install yarn classic
+npm i -g yarn
 
 # Install a bunch of things using brew
 brew install fzf
@@ -33,7 +36,6 @@ brew install python3
 brew install shellcheck
 brew install shfmt
 brew install starship
-brew install yarn
 brew install zsh-autosuggestions
 brew install zsh-history-substring-search
 brew install --cask 1password
@@ -45,18 +47,18 @@ brew install --cask slack
 brew install --cask sourcetree
 brew install --cask visual-studio-code
 
-source "$PWD/update_links_unix.sh"
+# Setup this project so we can run the ts files
+yarn install
+
+source "$PWD/src/update_links_unix.sh"
 
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
 
 # Sets osx defaults
-source "$PWD/osx/.defaults"
+source "$PWD/src/osx/.defaults"
 
 # Setup git defaults
-python3 -m "git.setup"
-
-# Install vs code extensions
-python3 -m "vscode.setup"
+yarn ts-node "$PWD/src/git/setup.ts"
 
 echo 'Please restart your terminal.'
