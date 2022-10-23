@@ -13,23 +13,24 @@ scoop install sudo
 
 $installs = @(
     # general
-    "Google.Chrome",
     "AgileBits.1Password",
+    "Google.Chrome",
+    "Google.Drive",
     # dev
-    "Git.Git", 
-    "Microsoft.VisualStudioCode", 
-    "GitHub.cli",
-    "Python.Python.3.10",
-    "EclipseAdoptium.Temurin.11.JDK",
     "CoreyButler.NVMforWindows",
+    "EclipseAdoptium.Temurin.11.JDK",
+    "Git.Git", 
+    "GitHub.cli",
     "JetBrains.Toolbox",
+    "Microsoft.VisualStudioCode", 
+    "Python.Python.3.10",
     "Starship.Starship",
     # gaming
-    "Valve.Steam",
     "EpicGames.EpicGamesLauncher",
-    "Ubisoft.Connect",
-    "Nvidia.GeForceExperience",
     "Logitech.GHUB"
+    "Nvidia.GeForceExperience",
+    "Ubisoft.Connect",
+    "Valve.Steam",
 )
 
 [string]$alreadyInstalled = winget list

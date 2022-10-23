@@ -42,6 +42,7 @@ brew install --cask 1password
 brew install --cask discord
 brew install --cask font-fira-code-nerd-font
 brew install --cask google-chrome
+brew install --cask google-drive
 brew install --cask jetbrains-toolbox
 brew install --cask slack
 brew install --cask sourcetree
