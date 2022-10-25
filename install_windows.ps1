@@ -17,8 +17,8 @@ $installs = @(
     "Google.Chrome",
     "Google.Drive",
     # dev
+    "Azul.Zulu.11.JDK",
     "CoreyButler.NVMforWindows",
-    "EclipseAdoptium.Temurin.11.JDK",
     "Git.Git", 
     "GitHub.cli",
     "JetBrains.Toolbox",
@@ -30,7 +30,7 @@ $installs = @(
     "Logitech.GHUB"
     "Nvidia.GeForceExperience",
     "Ubisoft.Connect",
-    "Valve.Steam",
+    "Valve.Steam"
 )
 
 [string]$alreadyInstalled = winget list
