@@ -1,15 +1,16 @@
 # Get scoop, used to get fonts
 if (Test-Path -Path $HOME\scoop) {
-    "Scoop is already installed"
+    "Scoop is already installed, updating"
+    scoop update --all
 }
 else {
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
     Invoke-RestMethod get.scoop.sh | Invoke-Expression  
+
+    scoop bucket add java
+    scoop install sudo
+    scooop install temurin11-jdk
 }
-
-
-scoop bucket add nerd-fonts
-scoop install sudo
 
 $installs = @(
     # general
@@ -17,7 +18,6 @@ $installs = @(
     "Google.Chrome",
     "Google.Drive",
     # dev
-    "Azul.Zulu.11.JDK",
     "CoreyButler.NVMforWindows",
     "Git.Git", 
     "GitHub.cli",
@@ -26,6 +26,7 @@ $installs = @(
     "Python.Python.3.10",
     "Starship.Starship",
     # gaming
+    "Discord.Discord",
     "EpicGames.EpicGamesLauncher",
     "Logitech.GHUB"
     "Nvidia.GeForceExperience",
@@ -47,14 +48,28 @@ foreach ($install in $installs) {
 
 winget upgrade --all
 
+if (Test-Path -Path .\nerd-fonts) {
+    "Nerd fonts is already installed, updating"
+    Set-Location nerd-fonts
+    git pull
+    .\install.ps1
+    Set-Location ..
+}
+else {
+    # Setting up nerd fonts
+    git clone --filter=blob:none --sparse git@github.com:ryanoasis/nerd-fonts
+    Set-Location nerd-fonts
+    git sparse-checkout add patched-fonts/FiraCode
+    .\install.ps1 FiraCode
+    Set-Location ..    
+}
+
 # Install node and yarn classic
 sudo nvm install latest
 npm i -g yarn
 
 # Refresh path
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User") 
-
-sudo scoop install FiraCode FiraCode-NF FiraCode-NF-Mono
 
 function addSymlink($path, $target) {
     if (-Not (Test-Path -Path $path)) {

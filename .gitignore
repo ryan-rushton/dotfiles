@@ -1,2 +1,5 @@
 node_modules/
 target/
+
+# On windows we install the nerd fonts repo
+nerd-fonts/
