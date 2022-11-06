@@ -7,6 +7,7 @@ else {
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
     Invoke-RestMethod get.scoop.sh | Invoke-Expression  
 
+    # Install scoop stuffs
     scoop bucket add java
     scoop install sudo
     scooop install temurin11-jdk
@@ -90,16 +91,10 @@ addSymlink -path "$HOME\Documents\PowerShell\Microsoft.VSCode_profile.ps1" -targ
 
 yarn install
 
-# Setup starship
-sudo yarn ts-node ".\src\starship\setup.ts"
+# Setup windows terminal
+sudo yarn ts-node ".\src\windows\setup.ts"
 
 # Load profile
 . $PROFILE
-
-# Setup git config
-sudo yarn ts-node ".\src\git\setup.ts"
-
-# Setup vscode
-sudo yarn ts-node ".\src\vscode\setup.ts"
 
 & $profile
