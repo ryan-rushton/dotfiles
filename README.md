@@ -10,11 +10,11 @@ Pretty straight forward, the installer script should do everything needed. Run `
 
 Run `.\install_windows.ps1`.
 
-The only manual step needed after the install script has run is to install the font into settings. To do this
+The only manual step needed after the install script has run is to install the font into settings. This may be fixed but if not you will need to install the fonts manually via
 
 - Go to `Settings -> Personalisation -> Fonts`
 - Click `Browse and install fonts`
-- Get desired `ttf` font files from `$HOME\scoop\apps\<font>\current`
+- Get desired `ttf` font files from the `nerd-fonts` repo that was cloned inside this.
 - Restarting terminals and or vscode should now use the desired fonts.
 
 ## TODOs
