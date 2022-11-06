@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { createSymlink } from '../utils/utils';
-// Since this is a helper file for windows these imports setup all the generic when they are imported
+// Since this is a helper file for windows these imports setup all the generic setup files when they are imported
 import '../git/setup.ts';
 import '../starship/setup.ts';
 import '../vscode/setup.ts';
