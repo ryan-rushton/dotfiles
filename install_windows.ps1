@@ -35,13 +35,19 @@ $installs = @(
     "Valve.Steam"
 )
 
+# These apps can't update via winget
+$dontUpdate = @(
+    "Discord.Discord"
+)
+
 [string]$alreadyInstalled = winget list
 
 foreach ($install in $installs) {
     if ($alreadyInstalled.Contains($install)) {
         $install + " is already installed"
-    }
-    else {
+    } elseif ($dontUpdate.Contains($install)) {
+        # Do nothing
+    } else {
         "Installing: " + $install
         winget install -h --accept-package-agreements --accept-source-agreements --id $install
     }
