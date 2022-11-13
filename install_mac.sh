@@ -51,7 +51,16 @@ brew install --cask visual-studio-code
 # Setup this project so we can run the ts files
 yarn install
 
-source "$PWD/src/update_links_unix.sh"
+source "$PWD/src/zsh/update_links_unix.sh"
+
+# Load zsh settings
+source "$HOME/.zshrc"
+
+# Setup starship
+yarn ts-node "$PWD/src/starship/setup.ts"
+
+# Setup vscode
+yarn ts-node "$PWD/src/vscode/setup.ts"
 
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash

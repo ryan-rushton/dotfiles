@@ -1,5 +1,8 @@
 node_modules/
 target/
 
-# On windows we install the nerd fonts repo
+# On windows and linux we install the nerd fonts repo
 nerd-fonts/
+
+# linux install stuff
+wget-log

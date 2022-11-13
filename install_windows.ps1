@@ -59,7 +59,7 @@ if (Test-Path -Path .\nerd-fonts) {
     "Nerd fonts is already installed, updating"
     Set-Location nerd-fonts
     git pull
-    .\install.ps1
+    .\install.ps1 FiraCode
     Set-Location ..
 }
 else {
