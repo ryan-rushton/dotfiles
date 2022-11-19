@@ -18,5 +18,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "terminal.integrated.defaultProfile.linux": "zsh",
-  "gitlens.mode.active": "review"
+  "gitlens.mode.active": "review",
+  "workbench.colorTheme": "Atom One Dark",
+  "workbench.iconTheme": "vscode-icons"
 }
