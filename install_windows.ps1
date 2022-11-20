@@ -10,7 +10,8 @@ else {
     # Install scoop stuffs
     scoop bucket add java
     scoop install sudo
-    scooop install temurin11-jdk
+    scoop install temurin11-jdk
+    scoop install gradle
 }
 
 $installs = @(
@@ -45,9 +46,11 @@ $dontUpdate = @(
 foreach ($install in $installs) {
     if ($alreadyInstalled.Contains($install)) {
         $install + " is already installed"
-    } elseif ($dontUpdate.Contains($install)) {
+    }
+    elseif ($dontUpdate.Contains($install)) {
         # Do nothing
-    } else {
+    }
+    else {
         "Installing: " + $install
         winget install -h --accept-package-agreements --accept-source-agreements --id $install
     }

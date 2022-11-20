@@ -32,6 +32,7 @@ brew install fzf
 brew install gh
 brew install git
 brew install java11
+brew install gradle
 brew install python3
 brew install shellcheck
 brew install shfmt
