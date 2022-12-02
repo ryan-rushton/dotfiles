@@ -45,7 +45,8 @@ $dontUpdate = @(
 
 foreach ($install in $installs) {
     if ($alreadyInstalled.Contains($install)) {
-        $install + " is already installed"
+        $install + " is already installed, upgradinng"
+        winget upgrade --id $install
     }
     elseif ($dontUpdate.Contains($install)) {
         # Do nothing
@@ -56,13 +57,10 @@ foreach ($install in $installs) {
     }
 }
 
-winget upgrade --all
-
 if (Test-Path -Path .\nerd-fonts) {
     "Nerd fonts is already installed, updating"
     Set-Location nerd-fonts
     git pull
-    .\install.ps1 FiraCode
     Set-Location ..
 }
 else {
@@ -70,7 +68,6 @@ else {
     git clone --filter=blob:none --sparse git@github.com:ryanoasis/nerd-fonts
     Set-Location nerd-fonts
     git sparse-checkout add patched-fonts/FiraCode
-    .\install.ps1 FiraCode
     Set-Location ..    
 }
 
