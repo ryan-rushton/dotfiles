@@ -1,5 +1,5 @@
 {
-  "editor.fontFamily": "FiraCode-Retina, 'FiraCode NF Retina', 'FiraCode NFM Retina', 'Fira Code', 'FiraCode Nerd Font', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontFamily": "FiraCode-Retina, 'FiraCode NF Retina', 'FiraCode NFM Retina', 'FiraCode NFM', 'Fira Code', 'FiraCode Nerd Font', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
   "editor.formatOnSave": true,
   "eslint.codeActionsOnSave.mode": "problems",
