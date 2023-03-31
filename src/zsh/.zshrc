@@ -1,5 +1,3 @@
-echo 'Loading .zshrc'
-
 if [[ $OSTYPE == 'darwin'* ]]; then
   # Enable brew, this seems to be an M1 thing, you could put the output of this on your path but since this is
   # checked in we run it every time
@@ -23,7 +21,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 if [[ $OSTYPE == 'darwin'* ]]; then
   source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-else 
+else
   source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
@@ -33,7 +31,6 @@ if [[ $OSTYPE == 'darwin'* ]]; then
   bindkey '^[[A' history-substring-search-up
   bindkey '^[[B' history-substring-search-down
 fi
-
 
 # Enable fuzzy search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

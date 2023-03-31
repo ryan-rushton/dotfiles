@@ -13,6 +13,7 @@ const EXTENSIONS = [
   'foxundermoon.shell-format',
   'ms-python.python',
   'Orta.vscode-jest',
+  'pkief.material-icon-theme',
   'streetsidesoftware.code-spell-checker',
   'stylelint.vscode-stylelint',
   'tamasfe.even-better-toml',
