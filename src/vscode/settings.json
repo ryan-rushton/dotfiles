@@ -20,5 +20,6 @@
   "terminal.integrated.defaultProfile.linux": "zsh",
   "gitlens.mode.active": "review",
   "workbench.colorTheme": "Atom One Dark",
-  "workbench.iconTheme": "material-icon-theme"
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.multiCursorModifier": "ctrlCmd"
 }
