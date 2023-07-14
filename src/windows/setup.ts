@@ -1,9 +1,9 @@
 import { join } from 'path';
 import { createSymlink } from '../utils/utils';
 // Since this is a helper file for windows these imports setup all the generic setup files when they are imported
-import '../git/setup.ts';
-import '../starship/setup.ts';
-import '../vscode/setup.ts';
+import '../git/setup';
+import '../starship/setup';
+import '../vscode/setup';
 
 const SETTINGS_FILE = 'settings.json';
 
