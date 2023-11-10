@@ -13,7 +13,7 @@ sudo apt install zsh-autosuggestions
 source ~/.bashrc
 # Set zsh as shell for root and me
 sudo chsh -s /bin/zsh
-sudo chsh -s /bin/zsh ryanrushton
+chsh -s /bin/zsh
 
 sudo apt install git
 sudo apt install fzf
@@ -21,8 +21,9 @@ sudo apt install gh
 sudo apt install shellcheck
 
 sudo snap install --classic code
-sudo snap install starship
 sudo snap install shfmt
+
+curl -sS https://starship.rs/install.sh | sh
 
 # Install nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
