@@ -26,6 +26,7 @@ $installs = @(
     "JetBrains.Toolbox",
     "Microsoft.VisualStudioCode", 
     "Python.Python.3.10",
+    "Rustlang.Rustup",
     "Starship.Starship",
     # gaming
     "Discord.Discord",

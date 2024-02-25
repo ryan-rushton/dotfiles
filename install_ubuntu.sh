@@ -8,17 +8,18 @@ sudo apt install zsh
 echo 'deb http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/shells:zsh-users:zsh-autosuggestions.list
 curl -fsSL https://download.opensuse.org/repositories/shells:zsh-users:zsh-autosuggestions/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_zsh-users_zsh-autosuggestions.gpg >/dev/null
 sudo apt update
-sudo apt install zsh-autosuggestions
 
 source ~/.bashrc
 # Set zsh as shell for root and me
 sudo chsh -s /bin/zsh
 chsh -s /bin/zsh
 
-sudo apt install git
-sudo apt install fzf
-sudo apt install gh
-sudo apt install shellcheck
+sudo apt install -y fonts-firacode \
+  fzf \
+  gh \
+  git \
+  shellcheck \
+  zsh-autosuggestions
 
 sudo snap install --classic code
 sudo snap install shfmt
@@ -31,19 +32,6 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-
-# Install fira code
-if [ -d "nerd-fonts/" ]; then
-  cd nerd-fonts/
-  git pull
-else
-  git clone --filter=blob:none --sparse https://github.com/ryanoasis/nerd-fonts.git
-  chown -R ryanrushton nerd-fonts/
-  cd nerd-fonts/
-  git sparse-checkout add patched-fonts/FiraCode
-fi
-./install.sh FiraCode
-cd ..
 
 nvm install node
 # Install yarn classic

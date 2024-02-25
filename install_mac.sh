@@ -28,26 +28,25 @@ nvm install latest
 npm i -g yarn
 
 # Install a bunch of things using brew
-brew install fzf
-brew install gh
-brew install git
-brew install java11
-brew install gradle
-brew install python3
-brew install shellcheck
-brew install shfmt
-brew install starship
-brew install zsh-autosuggestions
-brew install zsh-history-substring-search
-brew install --cask 1password
-brew install --cask discord
-brew install --cask font-fira-code-nerd-font
-brew install --cask google-chrome
-brew install --cask google-drive
-brew install --cask jetbrains-toolbox
-brew install --cask slack
-brew install --cask sourcetree
-brew install --cask visual-studio-code
+brew install fzf \
+  gh \
+  git \
+  gradle \
+  python3 \
+  rustup \
+  shellcheck \
+  shfmt \
+  starship \
+  zsh-autosuggestions \
+  zsh-history-substring-search
+
+brew install --cask 1password \
+  discord \
+  font-fira-code-nerd-font \
+  google-chrome \
+  google-drive \
+  jetbrains-toolbox \
+  visual-studio-code
 
 # Setup this project so we can run the ts files
 yarn install
