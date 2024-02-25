@@ -39,18 +39,24 @@ $installs = @(
 
 # These apps can't update via winget
 $dontUpdate = @(
-    "Discord.Discord"
+    "Discord.Discord",
+    "Rustlang.Rustup"
+)
+
+# These apps can't update via winget
+$executeOnInstall = @(
+    "Rustlang.Rustup"
 )
 
 [string]$alreadyInstalled = winget list
 
 foreach ($install in $installs) {
-    if ($alreadyInstalled.Contains($install)) {
+    if ($alreadyInstalled.Contains($install) -And -Not $dontUpdate.Contains($install)) {
         $install + " is already installed, upgradinng"
         winget upgrade --id $install
     }
-    elseif ($dontUpdate.Contains($install)) {
-        # Do nothing
+    elseif ($executeOnInstall.Contains($install)) {
+        winget install -e -h --accept-package-agreements --accept-source-agreements --id $install
     }
     else {
         "Installing: " + $install
