@@ -24,6 +24,7 @@ $installs = @(
     "Git.Git", 
     "GitHub.cli",
     "JetBrains.Toolbox",
+    "Microsoft.VisualStudio.2022.BuildTools",
     "Microsoft.VisualStudioCode", 
     "Python.Python.3.10",
     "Rustlang.Rustup",
@@ -45,6 +46,7 @@ $dontUpdate = @(
 
 # These apps can't update via winget
 $executeOnInstall = @(
+    "Microsoft.VisualStudio.2022.BuildTools",
     "Rustlang.Rustup"
 )
 
