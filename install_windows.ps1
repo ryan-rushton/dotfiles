@@ -24,6 +24,7 @@ $installs = @(
     "Git.Git", 
     "GitHub.cli",
     "JetBrains.Toolbox",
+    "Microsoft.Powershell",
     "Microsoft.VisualStudio.2022.BuildTools",
     "Microsoft.VisualStudioCode", 
     "Python.Python.3.10",
