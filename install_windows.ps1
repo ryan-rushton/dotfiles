@@ -83,6 +83,7 @@ else {
 
 # Install node and yarn classic
 sudo nvm install latest
+nvm use latest
 npm i -g yarn
 
 # Refresh path
@@ -90,20 +91,21 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";
 
 function addSymlink($path, $target) {
     if (-Not (Test-Path -Path $path)) {
-        sudo New-Item -ItemType SymbolicLink -Path $path -Target $target
+        sudo New-Item -ItemType SymbolicLink -Path $path -Value $target
     }
 }
+
 
 # Make dir for powershell profile
 # Powershell 5
 mkdir $HOME\Documents\WindowsPowerShell -Force
-addSymlink -path "$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1" -target ".\src\powershell\Microsoft.PowerShell_profile.ps1"
-addSymlink -path "$HOME\Documents\WindowsPowerShell\Microsoft.VSCode_profile.ps1" -target ".\src\powershell\Microsoft.PowerShell_profile.ps1"
+addSymlink -path "$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
+addSymlink -path "$HOME\Documents\WindowsPowerShell\Microsoft.VSCode_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 
 # Powershell 7
 mkdir $HOME\Documents\PowerShell -Force
-addSymlink -path "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -target ".\src\powershell\Microsoft.PowerShell_profile.ps1"
-addSymlink -path "$HOME\Documents\PowerShell\Microsoft.VSCode_profile.ps1" -target ".\src\powershell\Microsoft.PowerShell_profile.ps1"
+addSymlink -path "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
+addSymlink -path "$HOME\Documents\PowerShell\Microsoft.VSCode_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 
 yarn install
 

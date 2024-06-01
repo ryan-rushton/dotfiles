@@ -6,7 +6,6 @@ import { createSymlink } from '../utils/utils';
 const SETTINGS_FILE_NAME = 'settings.json';
 
 const EXTENSIONS = [
-  'akamud.vscode-theme-onedark',
   'dbaeumer.vscode-eslint',
   'eamodio.gitlens',
   'esbenp.prettier-vscode',
@@ -17,7 +16,6 @@ const EXTENSIONS = [
   'streetsidesoftware.code-spell-checker',
   'stylelint.vscode-stylelint',
   'tamasfe.even-better-toml',
-  'vscode-icons-team.vscode-icons',
 ];
 
 function getSettingsLocation() {
