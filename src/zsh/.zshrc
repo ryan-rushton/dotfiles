@@ -7,6 +7,10 @@ if [[ $OSTYPE == 'darwin'* ]]; then
   export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 fi
 
+if [[ $OSTYPE == 'linux-gnu'* ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
 # Increase node heap
 export NODE_OPTIONS=--max_old_space_size=2048
 
@@ -19,18 +23,12 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 # Setup autosuggestions
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-if [[ $OSTYPE == 'darwin'* ]]; then
-  source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-else
-  source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-if [[ $OSTYPE == 'darwin'* ]]; then
-  # Setup history substring searching
-  source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-  bindkey '^[[A' history-substring-search-up
-  bindkey '^[[B' history-substring-search-down
-fi
+# Setup history substring searching
+source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # Enable fuzzy search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

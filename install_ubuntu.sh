@@ -4,25 +4,32 @@ sudo -v
 # Install
 sudo apt install zsh
 
-# zsh auto suggestions
-echo 'deb http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/shells:zsh-users:zsh-autosuggestions.list
-curl -fsSL https://download.opensuse.org/repositories/shells:zsh-users:zsh-autosuggestions/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_zsh-users_zsh-autosuggestions.gpg >/dev/null
-sudo apt update
+# Linux brew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 source ~/.bashrc
 # Set zsh as shell for root and me
 sudo chsh -s /bin/zsh
 chsh -s /bin/zsh
 
-sudo apt install -y fonts-firacode \
-  fzf \
+sudo apt install -y fzf \
   gh \
   git \
-  shellcheck \
-  zsh-autosuggestions
+  shellcheck
 
 sudo snap install --classic code
 sudo snap install shfmt
+
+/home/linuxbrew/.linuxbrew/bin/brew install zsh-autosuggestions \
+  zsh-history-substring-search
+
+# Nerd fonts
+git clone --filter=blob:none --sparse git@github.com:ryanoasis/nerd-fonts
+cd nerd-fonts
+git sparse-checkout add patched-fonts/FiraCode
+./install.sh FiraCode
+cd ..
+rm -rf nerd-fonts
 
 curl -sS https://starship.rs/install.sh | sh
 
