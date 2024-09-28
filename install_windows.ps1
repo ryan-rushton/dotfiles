@@ -84,7 +84,6 @@ else {
 # Install node and yarn classic
 sudo nvm install latest
 nvm use latest
-npm i -g yarn
 
 # Refresh path
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User") 
@@ -107,10 +106,10 @@ mkdir $HOME\Documents\PowerShell -Force
 addSymlink -path "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 addSymlink -path "$HOME\Documents\PowerShell\Microsoft.VSCode_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 
-yarn install
+npm install
 
 # Setup windows terminal
-sudo yarn ts-node ".\src\windows\setup.ts"
+sudo npx ts-node ".\src\windows\setup.ts"
 
 # Load profile
 . $PROFILE

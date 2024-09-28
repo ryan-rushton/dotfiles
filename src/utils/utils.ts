@@ -16,6 +16,7 @@ export async function createSymlink(configPath: string, symlinkPath: string) {
 
   try {
     console.info(`Creating symlink, ${symlinkPath} is linked to ${configPath}.`);
+    await rm(symlinkPath, { force: true, recursive: true });
     await symlink(configPath, symlinkPath);
   } catch (e: unknown) {
     console.error(`Unable to create symlink for ${configPath} with symlink ${symlinkPath}.`, e);

@@ -24,9 +24,6 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # Install latest node
 nvm install latest
 
-# Install yarn classic
-npm i -g yarn
-
 # Install a bunch of things using brew
 brew install fzf \
   gh \
@@ -49,7 +46,7 @@ brew install --cask 1password \
   visual-studio-code
 
 # Setup this project so we can run the ts files
-yarn install
+npm install
 
 source "$PWD/src/zsh/update_links_unix.sh"
 
@@ -57,10 +54,10 @@ source "$PWD/src/zsh/update_links_unix.sh"
 source "$HOME/.zshrc"
 
 # Setup starship
-yarn ts-node "$PWD/src/starship/setup.ts"
+npx ts-node "$PWD/src/starship/setup.ts"
 
 # Setup vscode
-yarn ts-node "$PWD/src/vscode/setup.ts"
+npx ts-node "$PWD/src/vscode/setup.ts"
 
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
@@ -69,6 +66,6 @@ $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no
 source "$PWD/src/osx/.defaults"
 
 # Setup git defaults
-yarn ts-node "$PWD/src/git/setup.ts"
+npx ts-node "$PWD/src/git/setup.ts"
 
 echo 'Please restart your terminal.'

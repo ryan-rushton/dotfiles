@@ -41,25 +41,23 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 nvm install node
-# Install yarn classic
-npm i -g yarn
 
 # Install chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 rm google-chrome-stable_current_amd64.deb
 
-yarn install
+npm install
 
 source "$PWD/src/zsh/update_links_unix.sh"
 
 # Setup starship
-yarn ts-node "$PWD/src/starship/setup.ts"
+npx ts-node "$PWD/src/starship/setup.ts"
 
 # Setup vscode
-yarn ts-node "$PWD/src/vscode/setup.ts"
+npx ts-node "$PWD/src/vscode/setup.ts"
 
 # Setup git defaults
-yarn ts-node "$PWD/src/git/setup.ts"
+npx ts-node "$PWD/src/git/setup.ts"
 
 echo 'Please restart your terminal.'
