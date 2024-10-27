@@ -27,7 +27,7 @@ $installs = @(
     "Microsoft.Powershell",
     "Microsoft.VisualStudio.2022.BuildTools",
     "Microsoft.VisualStudioCode", 
-    "Python.Python.3.10",
+    "Python.Python.3.12",
     "Rustlang.Rustup",
     "Starship.Starship",
     # gaming
