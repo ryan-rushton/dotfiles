@@ -33,5 +33,14 @@ bindkey '^[[B' history-substring-search-down
 # Enable fuzzy search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH="/opt/homebrew/opt/protobuf@3/bin:$PATH"
+
+eval "$(direnv hook zsh)"
+
 # Enable starship (must go last)
 eval "$(starship init zsh)"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
