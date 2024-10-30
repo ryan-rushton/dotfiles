@@ -20,9 +20,7 @@
   "terminal.integrated.defaultProfile.linux": "zsh",
   "gitlens.mode.active": "review",
   "workbench.iconTheme": "material-icon-theme",
-<<<<<<< HEAD
-  "editor.multiCursorModifier": "ctrlCmd"
-=======
+  "editor.multiCursorModifier": "ctrlCmd",
   "[python]": {
     "editor.formatOnType": true
   },
@@ -37,5 +35,4 @@
   },
   "rr.shellPath": "/bin/zsh",
   "typescript.updateImportsOnFileMove.enabled": "always"
->>>>>>> 04a6591 (random things)
 }
