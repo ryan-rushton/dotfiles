@@ -56,14 +56,14 @@ $executeOnInstall = @(
 foreach ($install in $installs) {
     if ($alreadyInstalled.Contains($install) -And -Not $dontUpdate.Contains($install)) {
         $install + " is already installed, upgradinng"
-        winget upgrade --id $install
+        winget upgrade -h --id $install --silent --accept-package-agreements --accept-source-agreements
     }
     elseif ($executeOnInstall.Contains($install)) {
-        winget install -e -h --accept-package-agreements --accept-source-agreements --id $install
+        winget install -e -h --id $install --silent --accept-package-agreements --accept-source-agreements
     }
     else {
         "Installing: " + $install
-        winget install -h --accept-package-agreements --accept-source-agreements --id $install
+        winget install -h --id $install --silent --accept-package-agreements --accept-source-agreements
     }
 }
 
