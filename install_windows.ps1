@@ -1,25 +1,22 @@
-# Get scoop, used to get fonts
-if (Test-Path -Path $HOME\scoop) {
-    "Scoop is already installed, updating"
+# Ensure Scoop is Installed
+if (Get-Command scoop -ErrorAction SilentlyContinue) {
+    Write-Host "Scoop is already installed, updating..."
     scoop update --all
 }
 else {
-    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
     Invoke-RestMethod get.scoop.sh | Invoke-Expression  
-
-    # Install scoop stuffs
     scoop bucket add java
-    scoop install sudo
-    scoop install temurin11-jdk
-    scoop install gradle
+    scoop install sudo temurin11-jdk gradle
 }
 
+# Applications to Install via Winget
 $installs = @(
-    # general
+    # General
     "AgileBits.1Password",
     "Google.Chrome",
     "Google.Drive",
-    # dev
+    # Dev Tools
     "CoreyButler.NVMforWindows",
     "Git.Git", 
     "GitHub.cli",
@@ -30,88 +27,90 @@ $installs = @(
     "Python.Python.3.12",
     "Rustlang.Rustup",
     "Starship.Starship",
-    # gaming
+    # Gaming
     "Discord.Discord",
     "EpicGames.EpicGamesLauncher",
-    "Logitech.GHUB"
+    "Logitech.GHUB",
     "Nvidia.GeForceExperience",
     "Ubisoft.Connect",
     "Valve.Steam"
 )
 
-# These apps can't update via winget
+# Applications that Cannot Be Updated via Winget
 $dontUpdate = @(
     "Discord.Discord",
     "Rustlang.Rustup"
 )
 
-# These apps can't update via winget
+# Applications that Require Execution on Install
 $executeOnInstall = @(
     "Microsoft.VisualStudio.2022.BuildTools",
     "Rustlang.Rustup"
 )
 
-[string]$alreadyInstalled = winget list
-
+# Install or Upgrade Applications via Winget
 foreach ($install in $installs) {
-    if ($alreadyInstalled.Contains($install) -And -Not $dontUpdate.Contains($install)) {
-        $install + " is already installed, upgradinng"
-        winget upgrade -h --id $install --silent --accept-package-agreements --accept-source-agreements
+    if (winget list --id $install) {
+        if (-Not $dontUpdate.Contains($install)) {
+            Write-Host "$install is already installed, upgrading..."
+            winget upgrade -h --id $install --silent --accept-package-agreements --accept-source-agreements
+        }
     }
     elseif ($executeOnInstall.Contains($install)) {
+        Write-Host "Installing (with special execution): $install"
         winget install -e -h --id $install --silent --accept-package-agreements --accept-source-agreements
     }
     else {
-        "Installing: " + $install
+        Write-Host "Installing: $install"
         winget install -h --id $install --silent --accept-package-agreements --accept-source-agreements
     }
 }
 
-if (Test-Path -Path .\nerd-fonts) {
-    "Nerd fonts is already installed, updating"
-    Set-Location nerd-fonts
+# Nerd Fonts Installation
+$nerdFontsPath = "$HOME\nerd-fonts"
+if (Test-Path -Path $nerdFontsPath) {
+    Write-Host "Nerd fonts is already installed, updating..."
+    Set-Location $nerdFontsPath
     git pull
     Set-Location ..
 }
 else {
-    # Setting up nerd fonts
-    git clone --filter=blob:none --sparse git@github.com:ryanoasis/nerd-fonts
-    Set-Location nerd-fonts
+    Write-Host "Installing Nerd Fonts..."
+    git clone --filter=blob:none --sparse https://github.com/ryanoasis/nerd-fonts.git $nerdFontsPath
+    Set-Location $nerdFontsPath
     git sparse-checkout add patched-fonts/FiraCode
-    Set-Location ..    
+    Set-Location ..
 }
 
-# Install node and yarn classic
+# Install and Use Latest Node.js
 sudo nvm install latest
 nvm use latest
 
-# Refresh path
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User") 
+# Refresh Path
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + `
+    [System.Environment]::GetEnvironmentVariable("Path", "User")
+[System.Environment]::SetEnvironmentVariable("Path", $env:Path, "User")
 
+# Function to Create Symlinks
 function addSymlink($path, $target) {
-    if (-Not (Test-Path -Path $path)) {
-        sudo New-Item -ItemType SymbolicLink -Path $path -Value $target
+    if (-Not (Test-Path -Path $path) -And (Test-Path -Path $target)) {
+        sudo New-Item -ItemType SymbolicLink -Path $path -Value $target -Force
     }
 }
 
-
-# Make dir for powershell profile
-# Powershell 5
+# Set Up PowerShell Profiles
 mkdir $HOME\Documents\WindowsPowerShell -Force
 addSymlink -path "$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 addSymlink -path "$HOME\Documents\WindowsPowerShell\Microsoft.VSCode_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 
-# Powershell 7
 mkdir $HOME\Documents\PowerShell -Force
 addSymlink -path "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 addSymlink -path "$HOME\Documents\PowerShell\Microsoft.VSCode_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 
-npm install
-
-# Setup windows terminal
+# Install Windows Terminal Settings
+npm install -g ts-node
 sudo npx ts-node ".\src\windows\setup.ts"
 
-# Load profile
+# Load PowerShell Profile
 . $PROFILE
-
 & $profile
