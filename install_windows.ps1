@@ -24,7 +24,7 @@ $installs = @(
     "Microsoft.Powershell",
     "Microsoft.VisualStudio.2022.BuildTools",
     "Microsoft.VisualStudioCode", 
-    "Python.Python.3.12",
+    "Python.Python.3.13",
     "Rustlang.Rustup",
     "Starship.Starship",
     # Gaming
@@ -66,20 +66,22 @@ foreach ($install in $installs) {
     }
 }
 
+$originalPath = Get-Location
+
 # Nerd Fonts Installation
 $nerdFontsPath = "$HOME\nerd-fonts"
 if (Test-Path -Path $nerdFontsPath) {
     Write-Host "Nerd fonts is already installed, updating..."
     Set-Location $nerdFontsPath
     git pull
-    Set-Location ..
+    Set-Location $originalPath
 }
 else {
     Write-Host "Installing Nerd Fonts..."
     git clone --filter=blob:none --sparse https://github.com/ryanoasis/nerd-fonts.git $nerdFontsPath
     Set-Location $nerdFontsPath
     git sparse-checkout add patched-fonts/FiraCode
-    Set-Location ..
+    Set-Location $originalPath
 }
 
 # Install and Use Latest Node.js
