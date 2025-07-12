@@ -1,0 +1,73 @@
+# Alacritty terminal configuration for better keybinding support
+# This enables true Ctrl+V/Ctrl+P support that works more like traditional text editors
+
+# Window settings
+window:
+  padding:
+    x: 6
+    y: 6
+
+# Font configuration
+font:
+  normal:
+    family: 'FiraCode Nerd Font'
+    style: Regular
+  bold:
+    family: 'FiraCode Nerd Font'
+    style: Bold
+  italic:
+    family: 'FiraCode Nerd Font'
+    style: Italic
+  size: 12.0
+
+# Colors (using a dark theme that matches Pop OS)
+colors:
+  primary:
+    background: '#1e1e1e'
+    foreground: '#d4d4d4'
+
+  cursor:
+    text: '#1e1e1e'
+    cursor: '#d4d4d4'
+
+  normal:
+    black: '#1e1e1e'
+    red: '#f44747'
+    green: '#4ec9b0'
+    yellow: '#ffcc02'
+    blue: '#0078d4'
+    magenta: '#bc05bc'
+    cyan: '#0598bc'
+    white: '#e5e5e5'
+
+  bright:
+    black: '#666666'
+    red: '#f44747'
+    green: '#4ec9b0'
+    yellow: '#ffcc02'
+    blue: '#0078d4'
+    magenta: '#bc05bc'
+    cyan: '#0598bc'
+    white: '#e5e5e5'
+
+# Key bindings that enable standard copy/paste behavior
+key_bindings:
+  # Copy/Paste with Ctrl+C/Ctrl+V (like text editors)
+  - { key: V, mods: Control, action: Paste }
+  - { key: C, mods: Control, action: Copy }
+
+  # Also keep traditional terminal shortcuts
+  - { key: V, mods: Control|Shift, action: Paste }
+  - { key: C, mods: Control|Shift, action: Copy }
+
+  # Navigation shortcuts
+  - { key: N, mods: Control, action: SpawnNewInstance }
+  - { key: T, mods: Control, action: SpawnNewInstance }
+
+# Enable copy on selection
+selection:
+  save_to_clipboard: true
+
+# Shell
+shell:
+  program: /bin/zsh

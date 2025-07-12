@@ -34,7 +34,7 @@ export async function touch(path: string) {
     await access(path, constants.R_OK | constants.W_OK);
     // File exists so update the timestamps
     await utimes(path, now, now);
-  } catch (e: unknown) {
+  } catch (ignored: unknown) {
     // File doesn't exist so create it
     console.info(`Creating file ${path}`);
     await open(path, 'a+');

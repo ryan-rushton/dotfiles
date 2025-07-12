@@ -13,7 +13,7 @@ async function setupWindowsTerminal() {
 
   if (!localAppData) {
     console.warn(
-      'Cannot install windows terminal settings because LOCALAPPDATA cannot be resolved.'
+      'Cannot install windows terminal settings because LOCALAPPDATA cannot be resolved.',
     );
     return;
   }
@@ -24,7 +24,7 @@ async function setupWindowsTerminal() {
     'Packages',
     'Microsoft.WindowsTerminal_8wekyb3d8bbwe',
     'LocalState',
-    'settings.json'
+    'settings.json',
   );
   const config = join(__dirname, SETTINGS_FILE);
 

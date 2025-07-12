@@ -1,63 +1,43 @@
 #!/bin/bash
-sudo -v
+# Ubuntu-specific dotfiles installation script
 
-# Install
-sudo apt install zsh
+# Source the shared Debian base functionality
+source "$(dirname "$0")/install_debian_base.sh"
 
-# Linux brew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Ubuntu-specific function to install Chrome via wget/dpkg
+install_chrome_ubuntu() {
+    echo "Installing Chrome via direct download..."
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome-stable_current_amd64.deb
+    # Fix any dependency issues
+    sudo apt install -f
+    rm google-chrome-stable_current_amd64.deb
+}
 
-source ~/.bashrc
-# Set zsh as shell for root and me
-sudo chsh -s /bin/zsh
-chsh -s /bin/zsh
+# Ubuntu-specific function to install VSCode via Snap
+install_vscode_ubuntu() {
+    echo "Installing VSCode via Snap..."
+    sudo snap install --classic code
+    sudo snap install shfmt
+}
 
-sudo apt install -y fzf \
-  gh \
-  git \
-  shellcheck
+# Override the main install function for Ubuntu
+main_install() {
+    check_sudo
+    install_base_packages
+    setup_zsh
+    install_vscode_ubuntu
+    install_homebrew
+    install_brew_packages
+    install_nerd_fonts
+    install_starship
+    install_uv
+    install_node
+    install_chrome_ubuntu
+    setup_dotfiles
+    
+    echo 'Please restart your terminal.'
+}
 
-sudo snap install --classic code
-sudo snap install shfmt
-
-/home/linuxbrew/.linuxbrew/bin/brew install zsh-autosuggestions \
-  zsh-history-substring-search
-
-# Nerd fonts
-git clone --filter=blob:none --sparse git@github.com:ryanoasis/nerd-fonts
-cd nerd-fonts
-git sparse-checkout add patched-fonts/FiraCode
-./install.sh FiraCode
-cd ..
-rm -rf nerd-fonts
-
-curl -sS https://starship.rs/install.sh | sh
-
-# Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
-# Make it available to use immediately
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-
-nvm install node
-
-# Install chrome
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo dpkg -i google-chrome-stable_current_amd64.deb
-rm google-chrome-stable_current_amd64.deb
-
-npm install
-
-source "$PWD/src/zsh/update_links_unix.sh"
-
-# Setup starship
-npx ts-node "$PWD/src/starship/setup.ts"
-
-# Setup vscode
-npx ts-node "$PWD/src/vscode/setup.ts"
-
-# Setup git defaults
-npx ts-node "$PWD/src/git/setup.ts"
-
-echo 'Please restart your terminal.'
+# Run the installation
+main_install

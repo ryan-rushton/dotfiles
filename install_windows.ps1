@@ -7,7 +7,7 @@ else {
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
     Invoke-RestMethod get.scoop.sh | Invoke-Expression  
     scoop bucket add java
-    scoop install sudo temurin11-jdk gradle
+    scoop install sudo gradle
 }
 
 # Applications to Install via Winget
@@ -24,6 +24,7 @@ $installs = @(
     "Microsoft.Powershell",
     "Microsoft.VisualStudio.2022.BuildTools",
     "Microsoft.VisualStudioCode", 
+    "EclipseAdoptium.Temurin.21.JDK",
     "Python.Python.3.13",
     "Rustlang.Rustup",
     "Starship.Starship",
@@ -84,9 +85,12 @@ else {
     Set-Location $originalPath
 }
 
-# Install and Use Latest Node.js
-sudo nvm install latest
-nvm use latest
+# Install and Use Latest LTS Node.js
+sudo nvm install lts
+nvm use lts
+
+# Install uv (Python package manager)
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
 # Refresh Path
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + `

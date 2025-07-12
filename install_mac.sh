@@ -17,12 +17,13 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 xcode-select --install
 
 # Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# Install latest node
-nvm install latest
+# Install latest LTS node
+nvm install --lts
+nvm use --lts
 
 # Install a bunch of things using brew
 brew install fzf \
@@ -34,6 +35,7 @@ brew install fzf \
   shellcheck \
   shfmt \
   starship \
+  uv \
   zsh-autosuggestions \
   zsh-history-substring-search
 
