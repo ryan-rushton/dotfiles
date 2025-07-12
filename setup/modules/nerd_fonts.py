@@ -50,16 +50,6 @@ async def _install_windows() -> None:
     """Install Nerd Fonts on Windows using available package managers."""
     print("Attempting to install FiraCode Nerd Font via package managers...")
     
-    # Try Chocolatey first
-    if await _check_command("choco"):
-        print("Installing via Chocolatey...")
-        if await _run_command(["choco", "install", "nerd-fonts-firacode", "-y"]):
-            print("FiraCode Nerd Font installed via Chocolatey!")
-            return
-        else:
-            print("Chocolatey installation failed, trying Scoop...")
-    
-    # Try Scoop as fallback
     if await _check_command("scoop"):
         print("Installing via Scoop...")
         # Add nerd-fonts bucket first
@@ -89,39 +79,17 @@ async def _install_linux() -> None:
     """Install Nerd Fonts on Linux using distribution package managers."""
     print("Detecting Linux distribution...")
     
-    # Check if we're on Arch-based system
-    if await _check_command("pacman"):
-        print("Installing FiraCode Nerd Font via pacman...")
-        if await _run_command(["sudo", "pacman", "-S", "--noconfirm", "ttf-firacode-nerd"]):
-            print("FiraCode Nerd Font installed via pacman!")
-            return
+    print("Installing FiraCode Nerd Font via apt...")
+    # Update package list first
+    await _run_command(["sudo", "apt", "update"])
     
-    # Check for apt (Debian/Ubuntu)
-    if await _check_command("apt"):
-        print("Installing FiraCode Nerd Font via apt...")
-        # Update package list first
-        await _run_command(["sudo", "apt", "update"])
-        
-        # Try to install fonts-firacode
-        if await _run_command(["sudo", "apt", "install", "-y", "fonts-firacode"]):
-            print("FiraCode font installed via apt. Note: This may not be the Nerd Font version.")
-            print("For the full Nerd Font version, please download from: https://github.com/ryanoasis/nerd-fonts/releases")
-            return
-        else:
-            raise Exception("Failed to install via apt")
-    
-    # Check for dnf (Fedora)
-    if await _check_command("dnf"):
-        print("Installing FiraCode Nerd Font via dnf...")
-        if await _run_command(["sudo", "dnf", "install", "-y", "fira-code-fonts"]):
-            print("FiraCode font installed via dnf. Note: This may not be the Nerd Font version.")
-            print("For the full Nerd Font version, please download from: https://github.com/ryanoasis/nerd-fonts/releases")
-            return
-    
-    # Fallback to manual download
-    print("Could not detect a supported package manager.")
-    print("Please install FiraCode Nerd Font manually from: https://github.com/ryanoasis/nerd-fonts/releases")
-    print("Download the FiraCode.zip file and install the fonts according to your distribution instructions.")
+    # Try to install fonts-firacode
+    if await _run_command(["sudo", "apt", "install", "-y", "fonts-firacode"]):
+        print("FiraCode font installed via apt. Note: This may not be the Nerd Font version.")
+        print("For the full Nerd Font version, please download from: https://github.com/ryanoasis/nerd-fonts/releases")
+        return
+    else:
+        raise Exception("Failed to install via apt")
 
 
 async def _check_command(command: str) -> bool:
