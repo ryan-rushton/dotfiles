@@ -108,26 +108,34 @@ install_node() {
 # Function to setup dotfiles project dependencies
 setup_dotfiles() {
     echo "Setting up dotfiles project..."
-    # Install project dependencies
-    npm install
-
+    
     # Setup zsh links
     source "$PWD/src/zsh/update_links_unix.sh"
 
-    # Setup starship
-    npx ts-node "$PWD/src/starship/setup.ts"
+    # Choose implementation based on environment variable (default to Python)
+    if [ "$USE_PYTHON" = "false" ]; then
+        echo "Using TypeScript implementation..."
+        # Install project dependencies
+        npm install
 
-    # Setup vscode
-    npx ts-node "$PWD/src/vscode/setup.ts"
+        # Setup starship
+        npx ts-node "$PWD/src/starship/setup.ts"
 
-    # Setup git defaults
-    npx ts-node "$PWD/src/git/setup.ts"
+        # Setup vscode
+        npx ts-node "$PWD/src/vscode/setup.ts"
 
-    # Setup terminal configuration
-    npx ts-node "$PWD/src/terminal/setup.ts"
+        # Setup git defaults
+        npx ts-node "$PWD/src/git/setup.ts"
 
-    # Setup mouse and peripheral configuration
-    npx ts-node "$PWD/src/mouse/setup.ts"
+        # Setup terminal configuration
+        npx ts-node "$PWD/src/terminal/setup.ts"
+
+        # Setup mouse and peripheral configuration
+        npx ts-node "$PWD/src/mouse/setup.ts"
+    else
+        echo "Using Python implementation..."
+        uv run setup/main.py
+    fi
 }
 
 # Main installation function - can be overridden by specific distros

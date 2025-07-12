@@ -113,9 +113,16 @@ mkdir $HOME\Documents\PowerShell -Force
 addSymlink -path "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 addSymlink -path "$HOME\Documents\PowerShell\Microsoft.VSCode_profile.ps1" -target (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
 
-# Install Windows Terminal Settings
-npm install -g ts-node
-sudo npx ts-node ".\src\windows\setup.ts"
+# Setup dotfiles configuration (default to Python)
+if ($env:USE_PYTHON -eq "false") {
+    Write-Host "Using TypeScript implementation..."
+    # Install Windows Terminal Settings
+    npm install -g ts-node
+    sudo npx ts-node ".\src\windows\setup.ts"
+} else {
+    Write-Host "Using Python implementation..."
+    uv run setup/main.py --module windows
+}
 
 # Load PowerShell Profile
 . $PROFILE

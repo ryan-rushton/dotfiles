@@ -12,6 +12,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run lint:fix` - Run ESLint with automatic fixes
 - `npm run format` - Format code with Prettier
 
+### Python Linting & Type Checking
+
+- `uv run ruff check setup/` - Run comprehensive linting checks
+- `uv run ruff format setup/` - Format Python code
+- `uv run ruff format --check setup/` - Check if formatting is needed
+- `uv run ruff check setup/ --fix` - Auto-fix linting issues
+- `uv run mypy setup/` - Run strict type checking
+- `uv run ruff check --watch setup/` - Run linting in watch mode
+
 ### Installing Dotfiles
 
 - **macOS**: Run `./install_mac.sh` (requires default Apple Terminal)

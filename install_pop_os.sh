@@ -4,8 +4,6 @@
 # Source the shared Debian base functionality
 source "$(dirname "$0")/install_debian_base.sh"
 
-install_
-
 # Pop OS-specific function to install applications via Flatpak
 install_flatpak_apps() {
     echo "Installing applications via Flatpak..."

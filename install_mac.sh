@@ -55,19 +55,26 @@ source "$PWD/src/zsh/update_links_unix.sh"
 # Load zsh settings
 source "$HOME/.zshrc"
 
-# Setup starship
-npx ts-node "$PWD/src/starship/setup.ts"
+# Choose implementation based on environment variable (default to Python)
+if [ "$USE_PYTHON" = "false" ]; then
+    echo "Using TypeScript implementation..."
+    # Setup starship
+    npx ts-node "$PWD/src/starship/setup.ts"
 
-# Setup vscode
-npx ts-node "$PWD/src/vscode/setup.ts"
+    # Setup vscode
+    npx ts-node "$PWD/src/vscode/setup.ts"
+
+    # Setup git defaults
+    npx ts-node "$PWD/src/git/setup.ts"
+else
+    echo "Using Python implementation..."
+    uv run setup/main.py --module osx
+fi
 
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
 
 # Sets osx defaults
 source "$PWD/src/osx/.defaults"
-
-# Setup git defaults
-npx ts-node "$PWD/src/git/setup.ts"
 
 echo 'Please restart your terminal.'
