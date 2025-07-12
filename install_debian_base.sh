@@ -12,8 +12,8 @@ install_base_packages() {
     echo "Installing base packages..."
     # Use non-interactive mode and suppress verbose output
     export DEBIAN_FRONTEND=noninteractive
-    sudo apt update -qq > /dev/null 2>&1
-    sudo apt install -y -qq zsh \
+    sudo apt update
+    sudo apt install -y zsh \
         fzf \
         gh \
         git \
@@ -21,7 +21,9 @@ install_base_packages() {
         curl \
         wget \
         python3 \
-        python3-pip > /dev/null 2>&1
+        python3-pip \
+        golang-go \
+        direnv
     echo "Base packages installed successfully."
 }
 
@@ -49,6 +51,8 @@ install_homebrew() {
 install_brew_packages() {
     echo "Installing packages via Homebrew..."
     /home/linuxbrew/.linuxbrew/bin/brew install shfmt \
+        gradle \
+        rustup \
         zsh-autosuggestions \
         zsh-history-substring-search
 }

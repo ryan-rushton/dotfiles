@@ -1,12 +1,12 @@
-import tsEslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
-import importPlugin from 'eslint-plugin-import';
-import nPlugin from 'eslint-plugin-n';
-import promisePlugin from 'eslint-plugin-promise';
-import prettierConfig from 'eslint-config-prettier';
-import globals from 'globals';
+const tsEslint = require('@typescript-eslint/eslint-plugin')
+const tsParser = require('@typescript-eslint/parser')
+const importPlugin = require('eslint-plugin-import')
+const nPlugin = require('eslint-plugin-n')
+const promisePlugin = require('eslint-plugin-promise')
+const prettierConfig = require('eslint-config-prettier')
+const globals = require('globals')
 
-export default [
+module.exports = [
   {
     files: ['**/*.{js,mjs,cjs,ts}'],
     languageOptions: {
@@ -14,17 +14,17 @@ export default [
       sourceType: 'module',
       parser: tsParser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.json'
       },
       globals: {
-        ...globals.node,
-      },
+        ...globals.node
+      }
     },
     plugins: {
       '@typescript-eslint': tsEslint,
       import: importPlugin,
       n: nPlugin,
-      promise: promisePlugin,
+      promise: promisePlugin
     },
     rules: {
       // Custom overrides first
@@ -34,7 +34,7 @@ export default [
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/require-await': 'off',
-
+      
       // Standard rules
       'no-var': 'error',
       'prefer-const': 'error',
@@ -51,14 +51,14 @@ export default [
       eqeqeq: 'error',
       curly: 'error',
       'no-console': 'off',
-
+      
       // Import/module resolution rules
       'import/no-unresolved': 'off',
-      'n/no-missing-import': 'off',
-    },
+      'n/no-missing-import': 'off'
+    }
   },
   {
-    ignores: ['node_modules/', 'target/', 'eslint.config.js'],
+    ignores: ['node_modules/', 'target/', 'eslint.config.js']
   },
-  prettierConfig,
-];
+  prettierConfig
+]

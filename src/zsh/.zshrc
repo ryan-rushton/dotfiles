@@ -33,10 +33,16 @@ bindkey '^[[B' history-substring-search-down
 # Enable fuzzy search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH="$PATH:$(go env GOPATH)/bin"
+# Add Go to PATH if installed
+if command -v go &> /dev/null; then
+    export PATH="$PATH:$(go env GOPATH)/bin"
+fi
 export PATH="/opt/homebrew/opt/protobuf@3/bin:$PATH"
 
-eval "$(direnv hook zsh)"
+# Enable direnv if installed
+if command -v direnv &> /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
 
 # Enable starship (must go last)
 eval "$(starship init zsh)"
