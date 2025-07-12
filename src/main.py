@@ -75,7 +75,7 @@ async def run_module(module_name: str, dry_run: bool = False) -> bool:
         if str(current_dir) not in sys.path:
             sys.path.insert(0, str(current_dir))
 
-        module_path = f"setup.modules.{module_name}"
+        module_path = f"src.modules.{module_name}"
         module = importlib.import_module(module_path)
 
         if not hasattr(module, "setup"):

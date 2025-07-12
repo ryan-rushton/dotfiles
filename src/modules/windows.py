@@ -42,7 +42,7 @@ async def setup_windows_terminal() -> None:
         / "LocalState"
         / "settings.json"
     )
-    config = Path(__file__).parent.parent.parent / "src" / "windows" / SETTINGS_FILE
+    config = Path(__file__).parent.parent.parent / "config" / "windows" / SETTINGS_FILE
 
     try:
         await create_symlink(config, target)

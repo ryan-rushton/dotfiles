@@ -3,8 +3,8 @@
 # Needs to be zsh as we use zsh specific stuff
 
 if [[ "$TERM_PROGRAM" != "Apple_Terminal" ]]; then
-  echo "Please use the default apple terminal, we restart other programs during install and this may interrupt the install."
-  exit 0
+    echo "Please use the default apple terminal, we restart other programs during install and this may interrupt the install."
+    exit 0
 fi
 
 # Function to check if running with proper permissions
@@ -42,13 +42,13 @@ install_node() {
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
     else
         echo "NVM already installed, updating..."
-        cd "$HOME/.nvm" && git fetch --tags origin && git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+        cd "$HOME/.nvm" && git fetch --tags origin && git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
         cd -
     fi
-    
+
     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    
+
     # Install latest LTS node
     nvm install --lts
     nvm use --lts
@@ -61,6 +61,7 @@ install_cli_packages() {
         gh \
         git \
         gradle \
+        node \
         python3 \
         rustup \
         shellcheck \
@@ -86,8 +87,8 @@ install_applications() {
 # Function to setup zsh configuration
 setup_zsh() {
     echo "Setting up zsh configuration..."
-    source "$PWD/src/zsh/update_links_unix.sh"
-    
+    source "$PWD/config/zsh/update_links_unix.sh"
+
     # Setup fzf key bindings and completion
     echo "Setting up fzf integration..."
     $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
@@ -96,35 +97,16 @@ setup_zsh() {
 # Function to setup dotfiles project dependencies
 setup_dotfiles() {
     echo "Setting up dotfiles project..."
-    
-    # Install project dependencies
-    if [ ! -d "node_modules" ]; then
-        npm install
-    else
-        echo "Node modules already installed."
-    fi
-    
-    # Choose implementation based on environment variable (default to Python)
-    if [ "$USE_PYTHON" = "false" ]; then
-        echo "Using TypeScript implementation..."
-        # Setup starship
-        npx ts-node "$PWD/src/starship/setup.ts"
-        
-        # Setup vscode
-        npx ts-node "$PWD/src/vscode/setup.ts"
-        
-        # Setup git defaults
-        npx ts-node "$PWD/src/git/setup.ts"
-    else
-        echo "Using Python implementation..."
-        uv run setup/main.py --module osx
-    fi
+
+    # Run Python configuration
+    echo "Running dotfiles configuration..."
+    uv run src/main.py --module osx
 }
 
 # Function to apply macOS system defaults
 apply_system_defaults() {
     echo "Applying macOS system defaults..."
-    source "$PWD/src/osx/.defaults"
+    source "$PWD/config/osx/.defaults"
 }
 
 # Main installation function
@@ -138,7 +120,7 @@ main_install() {
     setup_zsh
     setup_dotfiles
     apply_system_defaults
-    
+
     echo 'Please restart your terminal.'
 }
 

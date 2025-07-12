@@ -1,10 +1,58 @@
-node_modules/
-target/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Python virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python type checking and linting
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# uv
+uv.lock
 
 # On windows and linux we install the nerd fonts repo
 nerd-fonts/
 
-# linux install stuff
+# Linux install stuff
 wget-log
 
+# Claude Code
 .claude/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

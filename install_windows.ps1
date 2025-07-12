@@ -97,18 +97,6 @@ function Install-WingetApp {
     }
 }
 
-# Function to install Node.js via NVM
-function Install-Node {
-    Write-Host "Installing and configuring Node.js..."
-    
-    # Install and Use Latest LTS Node.js
-    if (Get-Command nvm -ErrorAction SilentlyContinue) {
-        sudo nvm install lts
-        nvm use lts
-    } else {
-        Write-Host "NVM not found. Install CoreyButler.NVMforWindows first."
-    }
-}
 
 # Function to install Python package manager (uv)
 function Install-UV {
@@ -122,8 +110,21 @@ function Install-UV {
 
 # Function to install Nerd Fonts
 function Install-NerdFonts {
-    Write-Host "Installing Nerd Fonts via TypeScript module..."
-    npx ts-node ".\src\nerd-fonts\setup.ts"
+    Write-Host "Installing Nerd Fonts via PowerShell module..."
+    # Try multiple installation methods for Nerd Fonts
+    try {
+        # Try PowerShell module first
+        Install-Module -Name NerdFonts -Force -AcceptLicense -Scope CurrentUser
+        Install-NerdFont -Name FiraCode
+    } catch {
+        Write-Host "PowerShell NerdFonts module failed, trying Scoop..."
+        try {
+            scoop bucket add nerd-fonts
+            scoop install firacode
+        } catch {
+            Write-Host "Font installation failed. Please install FiraCode manually."
+        }
+    }
 }
 
 # Function to refresh environment PATH
@@ -155,7 +156,7 @@ function Add-Symlink {
 function Setup-PowerShellProfiles {
     Write-Host "Setting up PowerShell profiles..."
     
-    $profileSource = (Get-Item ".\src\powershell\Microsoft.PowerShell_profile.ps1").FullName
+    $profileSource = (Get-Item ".\config\powershell\Microsoft.PowerShell_profile.ps1").FullName
     
     # Windows PowerShell (5.1)
     $windowsPSDir = "$HOME\Documents\WindowsPowerShell"
@@ -170,26 +171,23 @@ function Setup-PowerShellProfiles {
     Add-Symlink -Path "$corePSDir\Microsoft.VSCode_profile.ps1" -Target $profileSource
 }
 
+# Function to install Node.js via NVM
+function Install-Node {
+    Write-Host "Installing and configuring Node.js..."
+    
+    # Install and Use Latest LTS Node.js
+    if (Get-Command nvm -ErrorAction SilentlyContinue) {
+        sudo nvm install lts
+        nvm use lts
+    } else {
+        Write-Host "NVM not found. Install CoreyButler.NVMforWindows first."
+    }
+}
+
 # Function to setup dotfiles configuration
 function Setup-Dotfiles {
-    Write-Host "Setting up dotfiles configuration..."
-    
-    # Install project dependencies if needed
-    if (-Not (Test-Path "node_modules")) {
-        Write-Host "Installing npm dependencies..."
-        npm install
-    }
-    
-    # Choose implementation based on environment variable (default to Python)
-    if ($env:USE_PYTHON -eq "false") {
-        Write-Host "Using TypeScript implementation..."
-        # Install Windows Terminal Settings
-        npm install -g ts-node
-        sudo npx ts-node ".\src\windows\setup.ts"
-    } else {
-        Write-Host "Using Python implementation..."
-        uv run setup/main.py --module windows
-    }
+    Write-Host "Running dotfiles configuration..."
+    uv run src/main.py --module windows
 }
 
 # Function to load PowerShell profile
@@ -204,8 +202,8 @@ function Load-PowerShellProfile {
 function Start-WindowsInstall {
     Install-Scoop
     Install-Applications
-    Install-Node
     Install-UV
+    Install-Node
     Install-NerdFonts
     Update-EnvironmentPath
     Setup-PowerShellProfiles

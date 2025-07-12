@@ -1,6 +1,6 @@
 # dotfiles
 
-My cross-platform dotfiles and fresh install setup. Features both TypeScript and Python implementations for OS-agnostic configuration management.
+My cross-platform dotfiles and fresh install setup. Built with Python + uv for lightweight, OS-agnostic configuration management.
 
 ## Quick Start
 
@@ -16,14 +16,13 @@ All install scripts are **idempotent** - safe to run multiple times without adve
 
 ## Architecture
 
-This repository uses a modular architecture with both TypeScript and Python implementations:
+This repository uses a modular Python architecture:
 
 ### Core Structure
 
 - **Installation Scripts**: Platform-specific shell scripts that bootstrap the entire system
-- **TypeScript Modules**: Located in `src/` directory - each component has a `setup.ts` file
-- **Python Modules**: Located in `setup/modules/` directory - equivalent Python implementations
-- **Utilities**: Common functions for file operations, symlinks, and directory creation
+- **Python Modules**: Located in `src/modules/` directory - each component handles specific configuration
+- **Utilities**: Common functions for file operations, symlinks, and directory creation (`src/utils/`)
 
 ### Configuration Components
 
@@ -34,20 +33,24 @@ This repository uses a modular architecture with both TypeScript and Python impl
 - **Nerd Fonts**: Automatic font installation using platform package managers
 - **Platform-specific**: macOS defaults, Windows settings, PowerShell profiles
 
-## Implementation Choice
+## Manual Configuration
 
-You can choose between TypeScript and Python implementations:
+You can run specific configuration modules individually:
 
 ```bash
-# Use TypeScript (legacy)
-export USE_PYTHON=false
-./install_mac.sh
+# Run all configuration modules
+uv run src/main.py
 
-# Use Python (default, recommended)
-./install_mac.sh
+# Run specific modules
+uv run src/main.py --module git
+uv run src/main.py --module vscode
+
+# See what would be done (dry run)
+uv run src/main.py --dry-run
+
+# List available modules
+uv run src/main.py --list
 ```
-
-The Python implementation is the current migration target and recommended approach.
 
 ## Platform Details
 
@@ -58,7 +61,6 @@ The Python implementation is the current migration target and recommended approa
 **What it installs**:
 - Homebrew package manager
 - Xcode command line tools
-- Node.js via NVM
 - CLI tools: fzf, gh, git, gradle, python3, rustup, shellcheck, shfmt, starship, uv, zsh plugins
 - Applications: 1Password, Discord, Chrome, Google Drive, JetBrains Toolbox, VSCode
 - FiraCode Nerd Font via Homebrew
@@ -67,7 +69,6 @@ The Python implementation is the current migration target and recommended approa
 
 **What it installs**:
 - Scoop package manager
-- Node.js via NVM for Windows
 - Applications via Winget: Dev tools, productivity apps, gaming platforms
 - FiraCode Nerd Font via Chocolatey/Scoop/PowerShell module
 - Python package manager (uv)
@@ -103,9 +104,9 @@ No manual font installation is required on any platform.
 ## Development Commands
 
 See [CLAUDE.md](CLAUDE.md) for detailed development commands including:
-- TypeScript type checking and linting
 - Python linting with ruff and mypy
-- Platform-specific build and test commands
+- Configuration testing and validation
+- Module development guidelines
 
 ## Troubleshooting
 

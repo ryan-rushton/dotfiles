@@ -47,7 +47,7 @@ async def setup() -> None:
     print("Setting up vscode")
 
     # Set up config symlink
-    config = Path(__file__).parent.parent.parent / "src" / "vscode" / SETTINGS_FILE_NAME
+    config = Path(__file__).parent.parent.parent / "config" / "vscode" / SETTINGS_FILE_NAME
     target = get_settings_location()
     await create_symlink(config, target)
 

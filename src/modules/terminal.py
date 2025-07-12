@@ -75,7 +75,7 @@ async def setup() -> None:
         await mkdir(alacritty_config_dir)
 
         alacritty_config_source = (
-            Path(__file__).parent.parent.parent / "src" / "terminal" / "alacritty.yml"
+            Path(__file__).parent.parent.parent / "config" / "alacritty" / "alacritty.yml"
         )
         alacritty_config_target = alacritty_config_dir / "alacritty.yml"
 

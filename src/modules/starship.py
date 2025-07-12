@@ -24,7 +24,7 @@ async def setup() -> None:
 
     # Set up paths for config and target
     target = dot_config / CONFIG_FILE
-    config = Path(__file__).parent.parent.parent / "src" / "starship" / CONFIG_FILE
+    config = Path(__file__).parent.parent.parent / "config" / "starship" / CONFIG_FILE
 
     # Create symlink
     await create_symlink(config, target)

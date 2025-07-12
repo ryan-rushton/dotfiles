@@ -50,7 +50,7 @@ ignore = [
 max-complexity = 10
 
 [tool.ruff.lint.isort]
-known-first-party = ["setup"]
+known-first-party = ["src"]
 
 [tool.ruff.format]
 quote-style = "double"

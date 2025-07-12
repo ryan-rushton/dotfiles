@@ -57,10 +57,10 @@ install_brew_packages() {
         zsh-history-substring-search
 }
 
-# Function to install Nerd Fonts using TypeScript module
+# Function to install Nerd Fonts
 install_nerd_fonts() {
-    echo "Installing Nerd Fonts via TypeScript module..."
-    npx ts-node "$PWD/src/nerd-fonts/setup.ts"
+    echo "Installing Nerd Fonts via system package manager..."
+    sudo apt install -y fonts-firacode
 }
 
 # Function to install Starship
@@ -99,37 +99,23 @@ install_node() {
     nvm use --lts
 }
 
-# Function to setup dotfiles project dependencies
-setup_dotfiles() {
-    echo "Setting up dotfiles project..."
-    
-    # Setup zsh links
-    source "$PWD/src/zsh/update_links_unix.sh"
+# Function to setup zsh configuration
+setup_zsh_config() {
+    echo "Setting up zsh configuration..."
+    # Create .zshrc symlink
+    source "$PWD/config/zsh/update_links_unix.sh"
 
-    # Choose implementation based on environment variable (default to Python)
-    if [ "$USE_PYTHON" = "false" ]; then
-        echo "Using TypeScript implementation..."
-        # Install project dependencies
-        npm install
-
-        # Setup starship
-        npx ts-node "$PWD/src/starship/setup.ts"
-
-        # Setup vscode
-        npx ts-node "$PWD/src/vscode/setup.ts"
-
-        # Setup git defaults
-        npx ts-node "$PWD/src/git/setup.ts"
-
-        # Setup terminal configuration
-        npx ts-node "$PWD/src/terminal/setup.ts"
-
-        # Setup mouse and peripheral configuration
-        npx ts-node "$PWD/src/mouse/setup.ts"
-    else
-        echo "Using Python implementation..."
-        uv run setup/main.py
+    # Setup fzf key bindings if available
+    if command -v fzf >/dev/null 2>&1; then
+        echo "Setting up fzf integration..."
     fi
+}
+
+# Function to setup dotfiles configuration
+setup_dotfiles() {
+    echo "Running dotfiles configuration..."
+    setup_zsh_config
+    uv run src/main.py
 }
 
 # Main installation function - can be overridden by specific distros

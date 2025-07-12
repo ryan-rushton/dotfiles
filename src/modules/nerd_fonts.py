@@ -8,17 +8,15 @@ as documented in the official Nerd Fonts repository.
 import asyncio
 import platform
 import subprocess
-import sys
-from typing import List, Optional
 
 
 async def setup() -> None:
     """Set up Nerd Fonts installation."""
     print("Installing Nerd Fonts...")
-    
+
     try:
         system = platform.system().lower()
-        
+
         if system == "darwin":
             await _install_macos()
         elif system == "windows":
@@ -43,13 +41,13 @@ async def _install_macos() -> None:
         else:
             raise Exception("Homebrew installation failed")
     except FileNotFoundError:
-        raise Exception("Homebrew not found. Please install Homebrew first.")
+        raise Exception("Homebrew not found. Please install Homebrew first.") from None
 
 
 async def _install_windows() -> None:
     """Install Nerd Fonts on Windows using available package managers."""
     print("Attempting to install FiraCode Nerd Font via package managers...")
-    
+
     if await _check_command("scoop"):
         print("Installing via Scoop...")
         # Add nerd-fonts bucket first
@@ -59,7 +57,7 @@ async def _install_windows() -> None:
             return
         else:
             print("Scoop installation failed, trying PowerShell module...")
-    
+
     # Try PowerShell NerdFonts module as final fallback
     print("Installing via PowerShell NerdFonts module...")
     powershell_commands = [
@@ -67,22 +65,22 @@ async def _install_windows() -> None:
         "Import-Module -Name NerdFonts",
         "Install-NerdFont -Name FiraCode"
     ]
-    
+
     for cmd in powershell_commands:
         if not await _run_command(["powershell", "-Command", cmd]):
             raise Exception("PowerShell NerdFonts module installation failed")
-    
+
     print("FiraCode Nerd Font installed via PowerShell module!")
 
 
 async def _install_linux() -> None:
     """Install Nerd Fonts on Linux using distribution package managers."""
     print("Detecting Linux distribution...")
-    
+
     print("Installing FiraCode Nerd Font via apt...")
     # Update package list first
     await _run_command(["sudo", "apt", "update"])
-    
+
     # Try to install fonts-firacode
     if await _run_command(["sudo", "apt", "install", "-y", "fonts-firacode"]):
         print("FiraCode font installed via apt. Note: This may not be the Nerd Font version.")
@@ -102,10 +100,10 @@ async def _check_command(command: str) -> bool:
 
 
 async def _run_command(
-    command: List[str], 
+    command: list[str],
     suppress_output: bool = False,
     check_return_code: bool = True
-) -> Optional[bool]:
+) -> bool | None:
     """Run a command asynchronously and return success status."""
     try:
         process = await asyncio.create_subprocess_exec(
@@ -113,16 +111,16 @@ async def _run_command(
             stdout=asyncio.subprocess.PIPE if suppress_output else None,
             stderr=asyncio.subprocess.PIPE if suppress_output else None,
         )
-        
+
         stdout, stderr = await process.communicate()
-        
+
         if check_return_code and process.returncode != 0:
             if not suppress_output:
                 print(f"Command failed: {' '.join(command)}")
                 if stderr:
                     print(f"Error: {stderr.decode()}")
             return False
-        
+
         return True
     except FileNotFoundError:
         if not suppress_output:
