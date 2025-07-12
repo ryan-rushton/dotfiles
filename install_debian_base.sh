@@ -41,9 +41,9 @@ install_homebrew() {
     # Set non-interactive mode for Homebrew installation
     export NONINTERACTIVE=1
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    
+
     # Add Homebrew to PATH
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >>~/.bashrc
     source ~/.bashrc
 }
 
@@ -76,6 +76,14 @@ install_starship() {
     curl -sS https://starship.rs/install.sh | sh -s -- --yes
 }
 
+install_vs_code() {
+    # VS Code - Microsoft's official repository
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >packages.microsoft.gpg
+    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+    echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+    sudo apt install -y code
+}
+
 # Function to install UV (Python package manager)
 install_uv() {
     echo "Installing uv (Python package manager)..."
@@ -86,12 +94,12 @@ install_uv() {
 install_node() {
     echo "Installing NVM and Node.js..."
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
-    
+
     # Make it available to use immediately
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-    
+
     # Install latest LTS Node.js
     nvm install --lts
     nvm use --lts
@@ -102,22 +110,22 @@ setup_dotfiles() {
     echo "Setting up dotfiles project..."
     # Install project dependencies
     npm install
-    
+
     # Setup zsh links
     source "$PWD/src/zsh/update_links_unix.sh"
-    
+
     # Setup starship
     npx ts-node "$PWD/src/starship/setup.ts"
-    
+
     # Setup vscode
     npx ts-node "$PWD/src/vscode/setup.ts"
-    
+
     # Setup git defaults
     npx ts-node "$PWD/src/git/setup.ts"
-    
+
     # Setup terminal configuration
     npx ts-node "$PWD/src/terminal/setup.ts"
-    
+
     # Setup mouse and peripheral configuration
     npx ts-node "$PWD/src/mouse/setup.ts"
 }
@@ -131,10 +139,11 @@ main_install() {
     install_brew_packages
     install_nerd_fonts
     install_starship
+    install_vs_code
     install_uv
     install_node
     setup_dotfiles
-    
+
     echo 'Please restart your terminal.'
 }
 

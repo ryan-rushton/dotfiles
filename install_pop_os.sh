@@ -4,22 +4,17 @@
 # Source the shared Debian base functionality
 source "$(dirname "$0")/install_debian_base.sh"
 
+install_
+
 # Pop OS-specific function to install applications via Flatpak
 install_flatpak_apps() {
     echo "Installing applications via Flatpak..."
 
-    # Developer tools
-    flatpak install -y --noninteractive flathub com.visualstudio.code
-    flatpak install -y --noninteractive flathub com.jetbrains.Toolbox
-
     # General applications
     flatpak install -y --noninteractive flathub com.google.Chrome
-    flatpak install -y --noninteractive flathub com.1password.1Password
-    flatpak install -y --noninteractive flathub com.google.Drive
 
     # Gaming applications
     flatpak install -y --noninteractive flathub com.discordapp.Discord
-    flatpak install -y --noninteractive flathub com.valvesoftware.Steam
 
     # Gaming peripherals and utilities
     flatpak install -y --noninteractive flathub org.freedesktop.Piper
@@ -39,6 +34,10 @@ install_gaming_support() {
     echo "Installing gaming support packages..."
     export DEBIAN_FRONTEND=noninteractive
 
+    # Steam - enable multiverse repository
+    sudo add-apt-repository -y multiverse
+    sudo apt update
+
     # Install gaming libraries and drivers
     sudo apt install -y \
         gamemode \
@@ -46,7 +45,8 @@ install_gaming_support() {
         steam-installer \
         lutris \
         wine \
-        winetricks
+        winetricks \
+        steam
 
     # Enable 32-bit architecture for gaming compatibility
     sudo dpkg --add-architecture i386

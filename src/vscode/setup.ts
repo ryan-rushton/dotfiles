@@ -42,7 +42,14 @@ export async function setup() {
 
   for (const extension of EXTENSIONS) {
     console.info(`Installing vscode extension ${extension}`);
-    execSync(`code --install-extension ${extension}`);
+    try {
+      execSync(`code --install-extension ${extension}`, { 
+        stdio: 'inherit',
+        timeout: 30000 
+      });
+    } catch (error) {
+      console.warn(`Failed to install extension ${extension}:`, error instanceof Error ? error.message : String(error));
+    }
   }
 }
 
