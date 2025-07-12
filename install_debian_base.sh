@@ -57,16 +57,10 @@ install_brew_packages() {
         zsh-history-substring-search
 }
 
-# Function to install Nerd Fonts
+# Function to install Nerd Fonts using TypeScript module
 install_nerd_fonts() {
-    echo "Installing Nerd Fonts..."
-    # Use HTTPS instead of SSH for broader compatibility
-    git clone --filter=blob:none --sparse https://github.com/ryanoasis/nerd-fonts
-    cd nerd-fonts
-    git sparse-checkout add patched-fonts/FiraCode
-    ./install.sh FiraCode
-    cd ..
-    rm -rf nerd-fonts
+    echo "Installing Nerd Fonts via TypeScript module..."
+    npx ts-node "$PWD/src/nerd-fonts/setup.ts"
 }
 
 # Function to install Starship
