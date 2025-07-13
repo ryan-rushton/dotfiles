@@ -55,12 +55,15 @@ async def setup() -> None:
     for extension in EXTENSIONS:
         print(f"Installing vscode extension {extension}")
         try:
+            # On Windows, use shell=True to properly resolve the code command
+            use_shell = get_platform() == "windows"
             result = subprocess.run(
                 ["code", "--install-extension", extension],
                 capture_output=True,
                 text=True,
                 timeout=30,
                 check=True,
+                shell=use_shell,
             )
             # code command outputs to stderr even on success, so check both
             if result.returncode == 0:
