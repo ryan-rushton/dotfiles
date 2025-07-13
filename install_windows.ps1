@@ -83,7 +83,8 @@ function Install-WingetApp {
         if (-Not $DontUpdate.Contains($AppId)) {
             Write-Host "$AppId is already installed, upgrading..."
             winget upgrade -h --id $AppId --silent --accept-package-agreements --accept-source-agreements
-        } else {
+        }
+        else {
             Write-Host "$AppId is already installed (skipping update)."
         }
     }
@@ -103,36 +104,64 @@ function Install-UV {
     Write-Host "Installing uv (Python package manager)..."
     if (-Not (Get-Command uv -ErrorAction SilentlyContinue)) {
         powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-    } else {
+    }
+    else {
         Write-Host "uv is already installed."
     }
 }
 
 # Function to install Nerd Fonts
 function Install-NerdFonts {
-    Write-Host "Installing Nerd Fonts via PowerShell module..."
-    # Try multiple installation methods for Nerd Fonts
+    Write-Host "Installing Nerd Fonts via Scoop..."
+    
+    if (-Not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+        Write-Host "❌ Scoop not found. Cannot install Nerd Fonts."
+        return
+    }
+    
     try {
-        # Try PowerShell module first
-        Install-Module -Name NerdFonts -Force -AcceptLicense -Scope CurrentUser
-        Install-NerdFont -Name FiraCode
-    } catch {
-        Write-Host "PowerShell NerdFonts module failed, trying Scoop..."
-        try {
+        # Add nerd-fonts bucket (only if not already added)
+        $buckets = scoop bucket list
+        if ($buckets -notcontains "nerd-fonts") {
+            Write-Host "Adding nerd-fonts bucket to Scoop..."
             scoop bucket add nerd-fonts
-            scoop install firacode
-        } catch {
-            Write-Host "Font installation failed. Please install FiraCode manually."
+        } else {
+            Write-Host "Nerd-fonts bucket already exists."
         }
+        
+        # Check if FiraCode-NF is already installed
+        $installed = scoop list FiraCode-NF 2>$null
+        if ($installed) {
+            Write-Host "FiraCode Nerd Font is already installed, checking for updates..."
+            scoop update FiraCode-NF
+            Write-Host "✅ FiraCode Nerd Font updated successfully!"
+        } else {
+            Write-Host "Installing FiraCode Nerd Font..."
+            scoop install FiraCode-NF
+            Write-Host "✅ FiraCode Nerd Font installed successfully via Scoop!"
+        }
+    } catch {
+        Write-Host "❌ Scoop installation failed. Please install FiraCode Nerd Font manually from: https://github.com/ryanoasis/nerd-fonts/releases"
     }
 }
 
 # Function to refresh environment PATH
 function Update-EnvironmentPath {
     Write-Host "Refreshing environment PATH..."
+    
+    # Add VSCode to PATH if not already present
+    $vscodePath = "${env:LOCALAPPDATA}\Programs\Microsoft VS Code\bin"
+    $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
+    
+    if ((Test-Path $vscodePath) -and ($currentPath -notlike "*$vscodePath*")) {
+        Write-Host "Adding VSCode to PATH..."
+        $newPath = $currentPath + ";" + $vscodePath
+        [System.Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+    }
+    
+    # Refresh current session PATH
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + `
         [System.Environment]::GetEnvironmentVariable("Path", "User")
-    [System.Environment]::SetEnvironmentVariable("Path", $env:Path, "User")
 }
 
 # Function to Create Symlinks
@@ -145,9 +174,11 @@ function Add-Symlink {
     if (-Not (Test-Path -Path $Path) -And (Test-Path -Path $Target)) {
         Write-Host "Creating symlink: $Path -> $Target"
         sudo New-Item -ItemType SymbolicLink -Path $Path -Value $Target -Force
-    } elseif (Test-Path -Path $Path) {
+    }
+    elseif (Test-Path -Path $Path) {
         Write-Host "Symlink already exists: $Path"
-    } else {
+    }
+    else {
         Write-Host "Target does not exist: $Target"
     }
 }
@@ -179,7 +210,8 @@ function Install-Node {
     if (Get-Command nvm -ErrorAction SilentlyContinue) {
         sudo nvm install lts
         nvm use lts
-    } else {
+    }
+    else {
         Write-Host "NVM not found. Install CoreyButler.NVMforWindows first."
     }
 }

@@ -24,11 +24,17 @@ async def setup() -> None:
         elif system == "linux":
             await _install_linux()
         else:
-            print(f"Platform {system} not supported for automatic Nerd Fonts installation.")
-            print("Please install FiraCode Nerd Font manually from: https://github.com/ryanoasis/nerd-fonts/releases")
+            print(
+                f"Platform {system} not supported for automatic Nerd Fonts installation."
+            )
+            print(
+                "Please install FiraCode Nerd Font manually from: https://github.com/ryanoasis/nerd-fonts/releases"
+            )
     except Exception as e:
         print(f"Failed to install Nerd Fonts: {e}")
-        print("Please install FiraCode Nerd Font manually from: https://github.com/ryanoasis/nerd-fonts/releases")
+        print(
+            "Please install FiraCode Nerd Font manually from: https://github.com/ryanoasis/nerd-fonts/releases"
+        )
 
 
 async def _install_macos() -> None:
@@ -45,32 +51,19 @@ async def _install_macos() -> None:
 
 
 async def _install_windows() -> None:
-    """Install Nerd Fonts on Windows using available package managers."""
-    print("Attempting to install FiraCode Nerd Font via package managers...")
-
-    if await _check_command("scoop"):
-        print("Installing via Scoop...")
-        # Add nerd-fonts bucket first
-        await _run_command(["scoop", "bucket", "add", "nerd-fonts"])
-        if await _run_command(["scoop", "install", "FiraCode-NF"]):
-            print("FiraCode Nerd Font installed via Scoop!")
-            return
-        else:
-            print("Scoop installation failed, trying PowerShell module...")
-
-    # Try PowerShell NerdFonts module as final fallback
-    print("Installing via PowerShell NerdFonts module...")
-    powershell_commands = [
-        "Install-PSResource -Name NerdFonts -Force",
-        "Import-Module -Name NerdFonts",
-        "Install-NerdFont -Name FiraCode"
-    ]
-
-    for cmd in powershell_commands:
-        if not await _run_command(["powershell", "-Command", cmd]):
-            raise Exception("PowerShell NerdFonts module installation failed")
-
-    print("FiraCode Nerd Font installed via PowerShell module!")
+    """Windows Nerd Fonts installation handled by PowerShell script."""
+    print(
+        "ℹ️  Nerd Fonts installation for Windows is handled by the PowerShell install script via Scoop."
+    )
+    print(
+        "   If you're running this module directly, please install FiraCode Nerd Font manually:"
+    )
+    print("   1. Install Scoop: https://scoop.sh/")
+    print("   2. Run: scoop bucket add nerd-fonts")
+    print("   3. Run: scoop install FiraCode-NF")
+    print(
+        "   Or download manually from: https://github.com/ryanoasis/nerd-fonts/releases"
+    )
 
 
 async def _install_linux() -> None:
@@ -83,26 +76,19 @@ async def _install_linux() -> None:
 
     # Try to install fonts-firacode
     if await _run_command(["sudo", "apt", "install", "-y", "fonts-firacode"]):
-        print("FiraCode font installed via apt. Note: This may not be the Nerd Font version.")
-        print("For the full Nerd Font version, please download from: https://github.com/ryanoasis/nerd-fonts/releases")
+        print(
+            "FiraCode font installed via apt. Note: This may not be the Nerd Font version."
+        )
+        print(
+            "For the full Nerd Font version, please download from: https://github.com/ryanoasis/nerd-fonts/releases"
+        )
         return
     else:
         raise Exception("Failed to install via apt")
 
 
-async def _check_command(command: str) -> bool:
-    """Check if a command is available in the system."""
-    try:
-        result = await _run_command([command, "--version"], suppress_output=True)
-        return result is not None
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        return False
-
-
 async def _run_command(
-    command: list[str],
-    suppress_output: bool = False,
-    check_return_code: bool = True
+    command: list[str], suppress_output: bool = False, check_return_code: bool = True
 ) -> bool | None:
     """Run a command asynchronously and return success status."""
     try:
