@@ -100,7 +100,7 @@ setup_dotfiles() {
 
     # Run Python configuration
     echo "Running dotfiles configuration..."
-    uv run src/main.py --module osx
+    uv run src/main.py
 }
 
 # Function to apply macOS system defaults

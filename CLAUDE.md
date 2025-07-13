@@ -59,3 +59,36 @@ This is a cross-platform dotfiles repository that uses Python + uv for configura
 - Each platform installer handles package management and then runs Python configuration
 - The system uses uv for Python dependency management and execution
 - Cross-platform compatibility with graceful platform detection and error handling
+
+## Design Principles
+
+### Separation of Concerns
+
+This repository follows a strict separation between **package installation** and **configuration management**:
+
+#### Install Scripts Responsibility (Shell/PowerShell)
+- **Package installation**: Installing applications, CLI tools, fonts, and system dependencies
+- **Package managers**: Using platform-specific package managers (Homebrew, Scoop, apt, Winget, etc.)
+- **System setup**: Creating directories, setting up shell environments, installing runtimes
+- **Examples**: Installing VSCode, Chrome, Node.js, Nerd Fonts, Git, Python, etc.
+
+#### Python Modules Responsibility (src/modules/)
+- **Configuration management**: Setting up config files, preferences, and user settings
+- **Symlink management**: Creating symlinks to dotfiles configurations
+- **User preferences**: Git config, VSCode settings, terminal themes, shell prompts
+- **Cross-platform logic**: Handling OS-specific configuration differences
+- **Examples**: Git user.name/email, VSCode settings.json, starship.toml, terminal colors
+
+#### Why This Separation?
+- **Clarity**: Clear distinction between "installing software" vs "configuring software"
+- **Maintainability**: Package installation logic stays in platform-native scripts
+- **Reliability**: Package managers work best in their native environments
+- **Consistency**: Configuration logic is unified across platforms in Python
+- **Testability**: Configuration can be tested independently of package installation
+
+#### What Goes Where?
+- **Fonts** → Install scripts (they are packages/software)
+- **VSCode application** → Install scripts (package installation)  
+- **VSCode settings.json** → Python modules (configuration)
+- **Git CLI tool** → Install scripts (package installation)
+- **Git user config** → Python modules (configuration)

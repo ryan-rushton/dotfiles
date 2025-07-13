@@ -219,7 +219,7 @@ function Install-Node {
 # Function to setup dotfiles configuration
 function Setup-Dotfiles {
     Write-Host "Running dotfiles configuration..."
-    uv run src/main.py --module windows
+    uv run src/main.py
 }
 
 # Function to load PowerShell profile

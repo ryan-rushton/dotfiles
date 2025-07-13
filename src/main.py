@@ -7,6 +7,7 @@ Provides CLI interface for configuration management.
 import argparse
 import asyncio
 import importlib
+import platform
 import sys
 from pathlib import Path
 
@@ -53,6 +54,31 @@ Examples:
     return parser
 
 
+def get_platform_modules() -> dict[str, list[str]]:
+    """Define which modules should run on each platform."""
+    return {
+        "darwin": [  # macOS
+            "git",
+            "starship", 
+            "vscode",
+            "osx"
+        ],
+        "linux": [  # Linux
+            "git",
+            "starship",
+            "vscode", 
+            "terminal",
+            "mouse"
+        ],
+        "windows": [  # Windows
+            "git",
+            "starship",
+            "vscode",
+            "windows"
+        ]
+    }
+
+
 def list_available_modules() -> list[str]:
     """List all available setup modules."""
     modules_dir = Path(__file__).parent / "modules"
@@ -65,6 +91,15 @@ def list_available_modules() -> list[str]:
             modules.append(module_file.stem)
 
     return sorted(modules)
+
+
+def get_modules_for_platform(platform_name: str | None = None) -> list[str]:
+    """Get the appropriate modules for the current or specified platform."""
+    if platform_name is None:
+        platform_name = platform.system().lower()
+    
+    platform_modules = get_platform_modules()
+    return platform_modules.get(platform_name, [])
 
 
 async def run_module(module_name: str, dry_run: bool = False) -> bool:
@@ -100,11 +135,18 @@ async def run_module(module_name: str, dry_run: bool = False) -> bool:
 
 
 async def run_all_modules(dry_run: bool = False) -> bool:
-    """Run all available setup modules."""
-    modules = list_available_modules()
+    """Run all platform-appropriate setup modules."""
+    current_platform = platform.system().lower()
+    modules = get_modules_for_platform(current_platform)
+    
     if not modules:
-        print("No modules found to run")
+        print(f"No modules configured for platform: {current_platform}")
         return True
+
+    print(f"Running {len(modules)} modules for {current_platform}:")
+    for module in modules:
+        print(f"  - {module}")
+    print()
 
     success = True
     for module_name in modules:
@@ -120,9 +162,17 @@ async def main_async() -> int:
     args = parser.parse_args()
 
     if args.list:
-        modules = list_available_modules()
+        all_modules = list_available_modules()
+        current_platform = platform.system().lower()
+        platform_modules = get_modules_for_platform(current_platform)
+        
         print("Available modules:")
-        for module in modules:
+        for module in all_modules:
+            status = "✓" if module in platform_modules else " "
+            print(f"  {status} {module}")
+        
+        print(f"\nModules for current platform ({current_platform}):")
+        for module in platform_modules:
             print(f"  - {module}")
         return 0
 
