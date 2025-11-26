@@ -2,36 +2,49 @@
 
 My cross-platform dotfiles and fresh install setup. Built with Python + uv for lightweight, OS-agnostic configuration management.
 
+Different systems serve different purposes:
+- **macOS**: Primary development environment
+- **Linux (Ubuntu/Pop OS)**: Development and gaming (Pop OS specific)
+- **Windows**: Gaming-focused with minimal development setup
+
 ## Quick Start
 
 Choose your platform and run the appropriate installer script:
 
 - **macOS**: `./install_mac.sh` (requires default Apple Terminal)
 - **Ubuntu**: `./install_ubuntu.sh` (uses Snap for applications)
-- **Pop OS**: `./install_pop_os.sh` (uses Flatpak for applications)
-- **Windows**: `.\install_windows.ps1` (uses Winget/Scoop)
+- **Pop OS**: `./install_pop_os.sh` (uses Flatpak + gaming support)
+- **Windows**: `.\install_windows.ps1` (gaming + minimal dev setup)
 - **Other Debian-based**: `./install_debian_base.sh` (base functionality)
 
 All install scripts are **idempotent** - safe to run multiple times without adverse effects.
 
 ## Architecture
 
-This repository uses a modular Python architecture:
+This repository uses a modular Python architecture with a clear separation between package installation (shell scripts) and configuration management (Python modules).
 
 ### Core Structure
 
 - **Installation Scripts**: Platform-specific shell scripts that bootstrap the entire system
-- **Python Modules**: Located in `src/modules/` directory - each component handles specific configuration
-- **Utilities**: Common functions for file operations, symlinks, and directory creation (`src/utils/`)
+  - Install applications, CLI tools, fonts, and system dependencies
+  - Use platform-native package managers (Homebrew, Scoop, apt, Winget, Snap, Flatpak)
 
-### Configuration Components
+- **Python Modules** (`src/modules/`): Handle configuration after installation
+  - Create symlinks to dotfiles
+  - Set user preferences (git config, VSCode settings, etc.)
+  - Cross-platform logic with graceful platform detection
 
-- **Starship**: Terminal prompt configuration
-- **VSCode**: Settings and extension management  
-- **Git**: Global git configuration setup
-- **Zsh**: Shell configuration with symlink management
-- **Nerd Fonts**: Automatic font installation using platform package managers
-- **Platform-specific**: macOS defaults, Windows settings, PowerShell profiles
+- **Utilities** (`src/utils/`): Common functions for file operations and symlink management
+
+### Available Python Modules
+
+- **git**: Global git configuration setup
+- **starship**: Terminal prompt configuration
+- **vscode**: Settings and extension management
+- **osx**: macOS system defaults (Dock, Finder, etc.)
+- **windows**: Windows system settings and preferences
+- **terminal**: GNOME Terminal and Alacritty configuration (Linux)
+- **mouse**: Linux mouse settings via gsettings
 
 ## Manual Configuration
 
@@ -48,7 +61,7 @@ uv run src/main.py --module vscode
 # See what would be done (dry run)
 uv run src/main.py --dry-run
 
-# List available modules
+# List available modules for your platform
 uv run src/main.py --list
 ```
 
@@ -59,47 +72,74 @@ uv run src/main.py --list
 **Requirements**: Default Apple Terminal (script will check and exit if using other terminals)
 
 **What it installs**:
-- Homebrew package manager
-- Xcode command line tools
-- CLI tools: fzf, gh, git, gradle, python3, rustup, shellcheck, shfmt, starship, uv, zsh plugins
-- Applications: 1Password, Discord, Chrome, Google Drive, JetBrains Toolbox, VSCode
-- FiraCode Nerd Font via Homebrew
+- **Package Manager**: Homebrew
+- **Development Tools**: Xcode command line tools, NVM + Node.js LTS
+- **CLI Tools**: fzf, gh, git, gradle, python3, rustup, shellcheck, shfmt, starship, uv
+- **Zsh Plugins**: zsh-autosuggestions, zsh-history-substring-search
+- **Applications**: 1Password, Discord, Chrome, Google Drive, JetBrains Toolbox, VSCode
+- **Fonts**: FiraCode Nerd Font via Homebrew
+
+**What it configures**:
+- Git global config, VSCode settings, Starship prompt, zsh configuration, macOS system defaults
 
 ### Windows
 
+**Primary Focus**: Gaming with minimal development setup
+
 **What it installs**:
-- Scoop package manager
-- Applications via Winget: Dev tools, productivity apps, gaming platforms
-- FiraCode Nerd Font via Chocolatey/Scoop/PowerShell module
-- Python package manager (uv)
-- PowerShell profile configuration
+- **Package Managers**: Scoop (CLI tools), Winget (applications)
+- **Core Apps**: 1Password, Chrome, Google Drive
+- **Development**: Git, GitHub CLI, NVM, Node.js, Python, Rust, VSCode, Visual Studio Build Tools, JetBrains Toolbox, PowerShell 7, Starship
+- **Gaming**: Discord, Steam, Epic Games, Ubisoft Connect, Logitech G Hub, GeForce Experience
+- **Fonts**: FiraCode Nerd Font via Scoop
+
+**What it configures**:
+- PowerShell profiles (both 5.1 and 7+), Git config, VSCode settings, Starship prompt, Windows system preferences
 
 ### Ubuntu
 
 **What it installs**:
-- Base packages via apt
-- Homebrew for Linux
-- Packages via Homebrew and Snap
-- FiraCode Nerd Font via system package manager
-- VS Code from Microsoft repository
+- **Package Managers**: apt (base), Homebrew (CLI tools), Snap (applications)
+- **Base Packages**: zsh, fzf, gh, git, shellcheck, curl, wget, python3, golang, direnv
+- **Brew Packages**: shfmt, gradle, rustup, zsh plugins
+- **Applications**: Chrome (direct download), VSCode (Microsoft repo)
+- **Development**: NVM + Node.js LTS, uv (Python)
+- **Fonts**: FiraCode via apt
+
+**What it configures**:
+- Zsh configuration, Git config, VSCode settings, Starship prompt, GNOME Terminal settings, mouse settings
 
 ### Pop OS
 
+**Primary Focus**: Development and gaming on Linux
+
 **What it installs**:
-- Base packages via apt  
-- Homebrew for Linux
-- Applications via Flatpak (instead of Snap)
-- FiraCode Nerd Font via system package manager
+- **Base**: Everything from Debian base (apt, Homebrew, CLI tools, NVM)
+- **Applications**: Flatpak-based (Chrome, Discord, Piper for gaming peripherals)
+- **Terminal**: Alacritty
+- **Gaming Support**: Steam, Lutris, Wine, Winetricks, GameMode, MangoHud, 32-bit compatibility
+- **Fonts**: FiraCode via apt
+
+**What it configures**:
+- Same as Ubuntu (zsh, git, VSCode, Starship, terminal, mouse settings)
+
+### Other Debian-based
+
+The `install_debian_base.sh` provides core functionality that can be sourced by other Debian-based distributions. It includes:
+- Base package installation via apt
+- Homebrew setup
+- CLI tools installation
+- NVM + Node.js setup
+- Zsh configuration
 
 ## Font Installation
 
-Nerd Fonts are now installed automatically using recommended package managers:
-
+Nerd Fonts are installed automatically using platform-recommended package managers:
 - **macOS**: Homebrew (`font-fira-code-nerd-font`)
-- **Windows**: Chocolatey → Scoop → PowerShell NerdFonts module (fallback chain)
-- **Linux**: Distribution package managers (pacman/apt/dnf)
+- **Windows**: Scoop nerd-fonts bucket (`FiraCode-NF`)
+- **Linux**: Distribution package managers (`fonts-firacode`)
 
-No manual font installation is required on any platform.
+No manual font installation required.
 
 ## Development Commands
 
@@ -111,15 +151,32 @@ See [CLAUDE.md](CLAUDE.md) for detailed development commands including:
 ## Troubleshooting
 
 ### macOS
-- Use default Apple Terminal (not iTerm2, Hyper, etc.)
+- Use default Apple Terminal (not iTerm2, Hyper, etc.) - the script restarts terminals during install
 - Ensure you have admin privileges for sudo commands
 
-### Windows  
+### Windows
 - Run PowerShell as Administrator
-- Ensure execution policy allows script execution
+- Ensure execution policy allows script execution: `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
 - Install will configure package managers automatically
 
 ### Linux
 - Ensure you have sudo privileges
 - Internet connection required for package downloads
+- Ubuntu uses Snap for applications, Pop OS uses Flatpak
 - Some distributions may require manual package manager setup
+
+## Design Philosophy
+
+### Separation of Concerns
+
+**Install Scripts (Shell/PowerShell)** → Package installation
+- Installing software, CLI tools, fonts
+- Using platform-native package managers
+- Setting up system environments
+
+**Python Modules** → Configuration management
+- Symlinking dotfiles
+- Setting user preferences
+- Cross-platform configuration logic
+
+This separation keeps package installation in native scripts while unifying configuration logic in Python.

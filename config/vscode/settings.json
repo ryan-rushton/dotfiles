@@ -1,8 +1,8 @@
 {
   "editor.fontFamily": "FiraCode-Retina, 'FiraCode NF Retina', 'FiraCode NFM Retina', 'FiraCode NFM', 'Fira Code', 'FiraCode Nerd Font', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.formatOnSave": true,
   "eslint.codeActionsOnSave.mode": "problems",
+  "editor.formatOnSave": true,
   "files.eol": "\n",
   "gitlens.codeLens.enabled": false,
   "[javascript]": {
@@ -20,7 +20,6 @@
   "terminal.integrated.defaultProfile.linux": "zsh",
   "gitlens.mode.active": "review",
   "workbench.iconTheme": "material-icon-theme",
-  "editor.multiCursorModifier": "ctrlCmd",
   "[python]": {
     "editor.formatOnType": true
   },

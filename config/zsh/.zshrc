@@ -11,6 +11,11 @@ if [[ $OSTYPE == 'linux-gnu'* ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
+# Setup pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
 # Increase node heap
 export NODE_OPTIONS=--max_old_space_size=2048
 
@@ -38,6 +43,7 @@ if command -v go &> /dev/null; then
     export PATH="$PATH:$(go env GOPATH)/bin"
 fi
 export PATH="/opt/homebrew/opt/protobuf@3/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 # Enable direnv if installed
 if command -v direnv &> /dev/null; then
@@ -50,5 +56,3 @@ eval "$(starship init zsh)"
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-. "$HOME/.local/bin/env"

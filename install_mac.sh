@@ -125,6 +125,8 @@ main_install() {
 }
 
 # Only run main_install if this script is executed directly (not sourced)
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+# Works in both bash (BASH_SOURCE) and zsh (zsh_eval_context)
+if [[ -z "${ZSH_EVAL_CONTEXT}" && "${BASH_SOURCE[0]}" == "${0}" ]] || \
+   [[ -n "${ZSH_EVAL_CONTEXT}" && "${ZSH_EVAL_CONTEXT}" != *:file ]]; then
     main_install
 fi
