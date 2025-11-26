@@ -59,14 +59,16 @@ def get_platform_modules() -> dict[str, list[str]]:
     return {
         "darwin": [  # macOS
             "git",
-            "starship", 
+            "zsh",
+            "starship",
             "vscode",
             "osx"
         ],
         "linux": [  # Linux
             "git",
+            "zsh",
             "starship",
-            "vscode", 
+            "vscode",
             "terminal",
             "mouse"
         ],

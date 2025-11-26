@@ -4,7 +4,7 @@ My cross-platform dotfiles and fresh install setup. Built with Python + uv for l
 
 Different systems serve different purposes:
 - **macOS**: Primary development environment
-- **Linux (Ubuntu/Pop OS)**: Development and gaming (Pop OS specific)
+- **Linux (Ubuntu)**: Development environment
 - **Windows**: Gaming-focused with minimal development setup
 
 ## Quick Start
@@ -13,7 +13,6 @@ Choose your platform and run the appropriate installer script:
 
 - **macOS**: `./install_mac.sh` (requires default Apple Terminal)
 - **Ubuntu**: `./install_ubuntu.sh` (uses Snap for applications)
-- **Pop OS**: `./install_pop_os.sh` (uses Flatpak + gaming support)
 - **Windows**: `.\install_windows.ps1` (gaming + minimal dev setup)
 - **Other Debian-based**: `./install_debian_base.sh` (base functionality)
 
@@ -38,7 +37,8 @@ This repository uses a modular Python architecture with a clear separation betwe
 
 ### Available Python Modules
 
-- **git**: Global git configuration setup
+- **git**: Global git configuration setup (user.email/user.name configurable via `GIT_USER_EMAIL` and `GIT_USER_NAME` environment variables)
+- **zsh**: Zsh configuration file symlinking (.zshrc, .zsh_aliases)
 - **starship**: Terminal prompt configuration
 - **vscode**: Settings and extension management
 - **osx**: macOS system defaults (Dock, Finder, etc.)
@@ -80,7 +80,7 @@ uv run src/main.py --list
 - **Fonts**: FiraCode Nerd Font via Homebrew
 
 **What it configures**:
-- Git global config, VSCode settings, Starship prompt, zsh configuration, macOS system defaults
+- Git global config (customizable via environment variables), Zsh configuration, VSCode settings, Starship prompt, macOS system defaults
 
 ### Windows
 
@@ -108,20 +108,6 @@ uv run src/main.py --list
 
 **What it configures**:
 - Zsh configuration, Git config, VSCode settings, Starship prompt, GNOME Terminal settings, mouse settings
-
-### Pop OS
-
-**Primary Focus**: Development and gaming on Linux
-
-**What it installs**:
-- **Base**: Everything from Debian base (apt, Homebrew, CLI tools, NVM)
-- **Applications**: Flatpak-based (Chrome, Discord, Piper for gaming peripherals)
-- **Terminal**: Alacritty
-- **Gaming Support**: Steam, Lutris, Wine, Winetricks, GameMode, MangoHud, 32-bit compatibility
-- **Fonts**: FiraCode via apt
-
-**What it configures**:
-- Same as Ubuntu (zsh, git, VSCode, Starship, terminal, mouse settings)
 
 ### Other Debian-based
 
@@ -162,7 +148,7 @@ See [CLAUDE.md](CLAUDE.md) for detailed development commands including:
 ### Linux
 - Ensure you have sudo privileges
 - Internet connection required for package downloads
-- Ubuntu uses Snap for applications, Pop OS uses Flatpak
+- Ubuntu uses Snap for applications
 - Some distributions may require manual package manager setup
 
 ## Design Philosophy

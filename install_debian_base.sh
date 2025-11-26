@@ -1,6 +1,17 @@
 #!/bin/bash
-# Debian-based install script for Ubuntu, Pop OS, and other Debian derivatives
+# Debian-based install script for Ubuntu and other Debian derivatives
 # This script contains the common installation steps
+
+# Exit on error, undefined variables, and pipe failures
+set -e
+set -u
+set -o pipefail
+
+# Trap errors and show line number
+trap 'echo "Error on line $LINENO. Exit code: $?"' ERR
+
+# Version configuration
+NVM_VERSION="v0.40.2"
 
 # Function to check if running as root
 check_sudo() {
@@ -87,7 +98,7 @@ install_uv() {
 # Function to install NVM and Node.js
 install_node() {
     echo "Installing NVM and Node.js..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+    curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
 
     # Make it available to use immediately
     export NVM_DIR="$HOME/.nvm"
@@ -99,22 +110,9 @@ install_node() {
     nvm use --lts
 }
 
-# Function to setup zsh configuration
-setup_zsh_config() {
-    echo "Setting up zsh configuration..."
-    # Create .zshrc symlink
-    source "$PWD/config/zsh/update_links_unix.sh"
-
-    # Setup fzf key bindings if available
-    if command -v fzf >/dev/null 2>&1; then
-        echo "Setting up fzf integration..."
-    fi
-}
-
 # Function to setup dotfiles configuration
 setup_dotfiles() {
     echo "Running dotfiles configuration..."
-    setup_zsh_config
     uv run src/main.py
 }
 

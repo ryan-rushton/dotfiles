@@ -8,7 +8,7 @@ This is a cross-platform dotfiles repository for setting up new computers and ke
 
 - **macOS**: Primary development environment
 - **Windows**: Gaming-focused with minimal development setup
-- **Linux (Ubuntu/Pop OS)**: Development and gaming (Pop OS specific)
+- **Linux (Ubuntu)**: Development environment
 
 ## Development Commands
 
@@ -32,7 +32,6 @@ This is a cross-platform dotfiles repository for setting up new computers and ke
 
 - **macOS**: Run `./install_mac.sh` (requires default Apple Terminal)
 - **Ubuntu**: Run `./install_ubuntu.sh` (uses Snap for applications)
-- **Pop OS**: Run `./install_pop_os.sh` (uses Flatpak + gaming support)
 - **Windows**: Run `.\install_windows.ps1` (gaming + minimal dev)
 - **Other Debian-based**: Run `./install_debian_base.sh` (base functionality)
 
@@ -45,14 +44,14 @@ This is a cross-platform dotfiles repository that uses Python + uv for configura
 ### Core Structure
 
 - **Installation Scripts**: Platform-specific shell scripts that bootstrap the entire system
-  - `install_debian_base.sh`: Shared functionality for Debian-based systems (sourced by Ubuntu/Pop OS scripts)
+  - `install_debian_base.sh`: Shared functionality for Debian-based systems (sourced by Ubuntu script)
   - `install_ubuntu.sh`: Ubuntu-specific (extends debian-base, uses Snap)
-  - `install_pop_os.sh`: Pop OS-specific (extends debian-base, uses Flatpak + gaming)
   - `install_mac.sh`: macOS-specific (uses Homebrew)
   - `install_windows.ps1`: Windows-specific (uses Winget/Scoop, gaming-focused)
 
 - **Python Setup Modules**: Located in `src/modules/` directory, each handles specific configuration
-  - `git.py` - Global git configuration setup
+  - `git.py` - Global git configuration setup (supports `GIT_USER_EMAIL` and `GIT_USER_NAME` env vars)
+  - `zsh.py` - Zsh configuration file symlinking (.zshrc, .zsh_aliases)
   - `starship.py` - Terminal prompt configuration
   - `vscode.py` - Settings and extension management
   - `osx.py` - macOS system defaults (Dock, Finder, etc.)
@@ -79,13 +78,15 @@ This is a cross-platform dotfiles repository that uses Python + uv for configura
 - The system uses uv for Python dependency management and execution
 - Cross-platform compatibility with graceful platform detection and error handling
 - Platform-specific modules only run on their target platform (defined in `src/main.py`)
+- All shell scripts use `set -e`, `set -u`, and `set -o pipefail` for robust error handling
+- NVM version is centralized in a variable at the top of install scripts
 
 ### Module Platform Assignment
 
 The `src/main.py` file defines which modules run on each platform:
 
-- **macOS**: git, starship, vscode, osx
-- **Linux**: git, starship, vscode, terminal, mouse
+- **macOS**: git, zsh, starship, vscode, osx
+- **Linux**: git, zsh, starship, vscode, terminal, mouse
 - **Windows**: git, starship, vscode, windows
 
 ## Design Principles
@@ -119,9 +120,10 @@ This repository follows a strict separation between **package installation** and
 - **VSCode application** → Install scripts (package installation)
 - **VSCode settings.json** → Python modules (configuration)
 - **Git CLI tool** → Install scripts (package installation)
-- **Git user config** → Python modules (configuration)
+- **Git user config** → Python modules (configuration, customizable via env vars)
 - **Gaming applications (Steam, Discord)** → Install scripts (package installation)
 - **PowerShell profiles** → Python modules (configuration via symlinks)
+- **Zsh configuration files** → Python modules (symlinks via zsh.py module)
 
 ## Platform-Specific Notes
 
@@ -143,16 +145,9 @@ This repository follows a strict separation between **package installation** and
 - Combines apt, Homebrew, and Snap for comprehensive package coverage
 - VSCode installed from Microsoft's official repository
 
-### Pop OS
-- Gaming-focused Linux setup
-- Uses Flatpak instead of Snap for applications
-- Includes gaming support: Steam, Lutris, Wine, GameMode, MangoHud
-- Installs Alacritty terminal
-- 32-bit architecture enabled for gaming compatibility
-
 ### Debian Base
 - `install_debian_base.sh` provides shared functionality for all Debian-based distros
-- Can be sourced by other scripts (Ubuntu, Pop OS) or run standalone
+- Can be sourced by other scripts (Ubuntu) or run standalone
 - Includes core package installation, Homebrew setup, NVM, and zsh configuration
 
 ## Adding New Modules
@@ -172,6 +167,20 @@ async def setup():
     print("Setting up mymodule...")
     # Your configuration logic here
 ```
+
+## Customization
+
+### Git Configuration
+
+The `git` module sets up global git configuration. By default, it uses the repository owner's email and name, but you can override these using environment variables:
+
+```bash
+export GIT_USER_EMAIL="your.email@example.com"
+export GIT_USER_NAME="Your Name"
+uv run src/main.py --module git
+```
+
+Or set them permanently in your shell profile before running the install script.
 
 ## Common Tasks
 

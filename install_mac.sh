@@ -2,6 +2,17 @@
 # macOS dotfiles installation script
 # Needs to be zsh as we use zsh specific stuff
 
+# Exit on error, undefined variables, and pipe failures
+set -e
+set -u
+set -o pipefail
+
+# Trap errors and show line number
+trap 'echo "Error on line $LINENO. Exit code: $?"' ERR
+
+# Version configuration
+NVM_VERSION="v0.40.2"
+
 if [[ "$TERM_PROGRAM" != "Apple_Terminal" ]]; then
     echo "Please use the default apple terminal, we restart other programs during install and this may interrupt the install."
     exit 0
@@ -39,7 +50,7 @@ install_xcode_tools() {
 install_node() {
     echo "Installing NVM and Node.js..."
     if [ ! -d "$HOME/.nvm" ]; then
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+        curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
     else
         echo "NVM already installed, updating..."
         cd "$HOME/.nvm" && git fetch --tags origin && git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
@@ -84,12 +95,8 @@ install_applications() {
         visual-studio-code
 }
 
-# Function to setup zsh configuration
-setup_zsh() {
-    echo "Setting up zsh configuration..."
-    source "$PWD/config/zsh/update_links_unix.sh"
-
-    # Setup fzf key bindings and completion
+# Function to setup fzf integration
+setup_fzf() {
     echo "Setting up fzf integration..."
     $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash
 }
@@ -117,7 +124,7 @@ main_install() {
     install_node
     install_cli_packages
     install_applications
-    setup_zsh
+    setup_fzf
     setup_dotfiles
     apply_system_defaults
 

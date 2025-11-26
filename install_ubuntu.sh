@@ -1,17 +1,36 @@
 #!/bin/bash
 # Ubuntu-specific dotfiles installation script
 
+# Exit on error, undefined variables, and pipe failures
+set -e
+set -u
+set -o pipefail
+
+# Trap errors and show line number
+trap 'echo "Error on line $LINENO. Exit code: $?"' ERR
+
 # Source the shared Debian base functionality
 source "$(dirname "$0")/install_debian_base.sh"
 
 # Ubuntu-specific function to install Chrome via wget/dpkg
 install_chrome_ubuntu() {
+    if command -v google-chrome >/dev/null 2>&1; then
+        echo "Chrome is already installed, skipping..."
+        return 0
+    fi
+
     echo "Installing Chrome via direct download..."
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo dpkg -i google-chrome-stable_current_amd64.deb
+    local chrome_deb="google-chrome-stable_current_amd64.deb"
+
+    # Only download if not already present
+    if [ ! -f "$chrome_deb" ]; then
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    fi
+
+    sudo dpkg -i "$chrome_deb"
     # Fix any dependency issues
-    sudo apt install -f
-    rm google-chrome-stable_current_amd64.deb
+    sudo apt install -f -y
+    rm -f "$chrome_deb"
 }
 
 # Ubuntu-specific function to install VSCode via Snap
