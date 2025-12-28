@@ -34,8 +34,14 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Setup history substring searching
 source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+# Bind up/down arrows - use multiple codes for cross-platform compatibility
+bindkey '^[[A' history-substring-search-up    # Standard ANSI
+bindkey '^[[B' history-substring-search-down  # Standard ANSI
+bindkey '^[OA' history-substring-search-up    # Application mode (some macOS terminals)
+bindkey '^[OB' history-substring-search-down  # Application mode (some macOS terminals)
+# Also bind using terminfo for maximum compatibility
+[[ -n "${terminfo[kcuu1]}" ]] && bindkey "${terminfo[kcuu1]}" history-substring-search-up
+[[ -n "${terminfo[kcud1]}" ]] && bindkey "${terminfo[kcud1]}" history-substring-search-down
 
 # Enable fuzzy search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
