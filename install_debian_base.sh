@@ -93,6 +93,9 @@ install_vs_code() {
 install_uv() {
     echo "Installing uv (Python package manager)..."
     curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    # Add uv to PATH for this session
+    export PATH="$HOME/.local/bin:$PATH"
 }
 
 # Function to install NVM and Node.js
