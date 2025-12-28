@@ -33,5 +33,13 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "rr.shellPath": "/bin/zsh",
-  "typescript.updateImportsOnFileMove.enabled": "always"
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "claudeCode.preferredLocation": "panel",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "docker.extension.enableComposeLanguageServer": false,
+  "[dockercompose]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

@@ -100,6 +100,9 @@ install_node() {
     echo "Installing NVM and Node.js..."
     curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
 
+    # Temporarily disable 'set -u' because nvm.sh has unbound variables
+    set +u
+
     # Make it available to use immediately
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
@@ -108,6 +111,9 @@ install_node() {
     # Install latest LTS Node.js
     nvm install --lts
     nvm use --lts
+
+    # Re-enable 'set -u'
+    set -u
 }
 
 # Function to setup dotfiles configuration
