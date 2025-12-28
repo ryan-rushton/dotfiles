@@ -11,10 +11,12 @@ if [[ $OSTYPE == 'linux-gnu'* ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
-# Setup pyenv
+# Setup pyenv if installed
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+if command -v pyenv &> /dev/null; then
+    eval "$(pyenv init -)"
+fi
 
 # Increase node heap
 export NODE_OPTIONS=--max_old_space_size=2048
