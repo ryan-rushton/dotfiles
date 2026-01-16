@@ -34,8 +34,8 @@ function Install-Applications {
         "Microsoft.Powershell",
         "Microsoft.VisualStudio.2022.BuildTools",
         "Microsoft.VisualStudioCode",
-        "EclipseAdoptium.Temurin.21.JDK",
-        "Python.Python.3.13",
+        "EclipseAdoptium.Temurin.25.JDK",
+        "Python.Python.3.14",
         "Rustlang.Rustup",
         "Starship.Starship"
     )

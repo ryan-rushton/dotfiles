@@ -11,7 +11,7 @@ set -o pipefail
 trap 'echo "Error on line $LINENO. Exit code: $?"' ERR
 
 # Version configuration
-NVM_VERSION="v0.40.2"
+NVM_VERSION="v0.40.3"
 
 if [[ "$TERM_PROGRAM" != "Apple_Terminal" ]]; then
     echo "Please use the default apple terminal, we restart other programs during install and this may interrupt the install."
