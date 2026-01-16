@@ -8,9 +8,9 @@ function Install-Scoop {
     else {
         Write-Host "Installing Scoop..."
         Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-        Invoke-RestMethod get.scoop.sh | Invoke-Expression  
+        Invoke-RestMethod get.scoop.sh | Invoke-Expression
         scoop bucket add java
-        scoop install sudo gradle
+        scoop install sudo
     }
 }
 
@@ -22,18 +22,18 @@ function Install-Applications {
     $generalApps = @(
         "AgileBits.1Password",
         "Google.Chrome",
-        "Google.Drive"
+        "Google.Drive",
+        "TheBrowserCompany.Arc"
     )
     
     # Development tools
     $devTools = @(
         "CoreyButler.NVMforWindows",
-        "Git.Git", 
+        "Git.Git",
         "GitHub.cli",
-        "JetBrains.Toolbox",
         "Microsoft.Powershell",
         "Microsoft.VisualStudio.2022.BuildTools",
-        "Microsoft.VisualStudioCode", 
+        "Microsoft.VisualStudioCode",
         "EclipseAdoptium.Temurin.21.JDK",
         "Python.Python.3.13",
         "Rustlang.Rustup",

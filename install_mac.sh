@@ -71,7 +71,6 @@ install_cli_packages() {
     brew install fzf \
         gh \
         git \
-        gradle \
         node \
         python3 \
         rustup \
@@ -87,11 +86,11 @@ install_cli_packages() {
 install_applications() {
     echo "Installing applications via Homebrew Cask..."
     brew install --cask 1password \
+        arc \
         discord \
         font-fira-code-nerd-font \
         google-chrome \
         google-drive \
-        jetbrains-toolbox \
         visual-studio-code
 }
 

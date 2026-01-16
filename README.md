@@ -5,6 +5,7 @@ My cross-platform dotfiles and fresh install setup. Built with Python + uv for l
 Different systems serve different purposes:
 - **macOS**: Primary development environment
 - **Linux (Ubuntu)**: Development environment
+- **Linux (Server)**: Minimal Docker-focused setup for headless media servers
 - **Windows**: Gaming-focused with minimal development setup
 
 ## Quick Start
@@ -13,6 +14,7 @@ Choose your platform and run the appropriate installer script:
 
 - **macOS**: `./install_mac.sh` (requires default Apple Terminal)
 - **Ubuntu**: `./install_ubuntu.sh` (uses Snap for applications)
+- **Server (Debian/Ubuntu)**: `./install_server.sh` (minimal Docker setup for headless servers)
 - **Windows**: `.\install_windows.ps1` (gaming + minimal dev setup)
 - **Other Debian-based**: `./install_debian_base.sh` (base functionality)
 
@@ -74,9 +76,9 @@ uv run src/main.py --list
 **What it installs**:
 - **Package Manager**: Homebrew
 - **Development Tools**: Xcode command line tools, NVM + Node.js LTS
-- **CLI Tools**: fzf, gh, git, gradle, python3, rustup, shellcheck, shfmt, starship, uv
+- **CLI Tools**: fzf, gh, git, python3, rustup, shellcheck, shfmt, starship, uv
 - **Zsh Plugins**: zsh-autosuggestions, zsh-history-substring-search
-- **Applications**: 1Password, Discord, Chrome, Google Drive, JetBrains Toolbox, VSCode
+- **Applications**: 1Password, Arc Browser, Discord, Chrome, Google Drive, VSCode
 - **Fonts**: FiraCode Nerd Font via Homebrew
 
 **What it configures**:
@@ -88,8 +90,8 @@ uv run src/main.py --list
 
 **What it installs**:
 - **Package Managers**: Scoop (CLI tools), Winget (applications)
-- **Core Apps**: 1Password, Chrome, Google Drive
-- **Development**: Git, GitHub CLI, NVM, Node.js, Python, Rust, VSCode, Visual Studio Build Tools, JetBrains Toolbox, PowerShell 7, Starship
+- **Core Apps**: 1Password, Arc Browser, Chrome, Google Drive
+- **Development**: Git, GitHub CLI, NVM, Node.js, Python, Rust, VSCode, Visual Studio Build Tools, PowerShell 7, Starship
 - **Gaming**: Discord, Steam, Epic Games, Ubisoft Connect, Logitech G Hub, GeForce Experience
 - **Fonts**: FiraCode Nerd Font via Scoop
 
@@ -101,13 +103,31 @@ uv run src/main.py --list
 **What it installs**:
 - **Package Managers**: apt (base), Homebrew (CLI tools), Snap (applications)
 - **Base Packages**: zsh, fzf, gh, git, shellcheck, curl, wget, python3, golang, direnv
-- **Brew Packages**: shfmt, gradle, rustup, zsh plugins
+- **Brew Packages**: shfmt, rustup, zsh plugins
 - **Applications**: Chrome (direct download), VSCode (Microsoft repo)
 - **Development**: NVM + Node.js LTS, uv (Python)
 - **Fonts**: FiraCode via apt
 
 **What it configures**:
 - Zsh configuration, Git config, VSCode settings, Starship prompt, GNOME Terminal settings, mouse settings
+
+### Server (Minimal Docker Setup)
+
+**Purpose**: Lightweight setup for headless Debian/Ubuntu servers, focused on Docker container management
+
+**What it installs**:
+- **Package Managers**: apt (base), Homebrew (CLI tools)
+- **Base Packages**: zsh, fzf, git, curl, wget
+- **Docker**: Docker Engine, Docker Compose, Docker Buildx
+- **CLI Tools**: Starship prompt, zsh plugins
+- **Development**: NVM + Node.js LTS (optional for containers), uv (Python)
+- **No GUI applications or desktop tools**
+
+**What it configures**:
+- Zsh configuration, Git config, Starship prompt
+- Docker group membership (requires logout to take effect)
+
+**Perfect for**: Media servers (Plex, Jellyfin), NAS systems, headless build servers
 
 ### Other Debian-based
 

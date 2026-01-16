@@ -62,7 +62,6 @@ install_homebrew() {
 install_brew_packages() {
     echo "Installing packages via Homebrew..."
     /home/linuxbrew/.linuxbrew/bin/brew install shfmt \
-        gradle \
         rustup \
         zsh-autosuggestions \
         zsh-history-substring-search
