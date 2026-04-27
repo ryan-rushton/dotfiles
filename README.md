@@ -7,6 +7,7 @@ Different systems serve different purposes:
 - **Linux (Ubuntu)**: Development environment
 - **Linux (Server)**: Minimal Docker-focused setup for headless media servers
 - **Windows**: Gaming-focused with minimal development setup
+- **WSL (Ubuntu on Windows)**: Development inside Windows — uses `install_ubuntu.sh`, which auto-detects WSL and skips GUI apps (those live on the Windows side)
 
 ## Quick Start
 
@@ -14,6 +15,7 @@ Choose your platform and run the appropriate installer script:
 
 - **macOS**: `./install_mac.sh` (requires default Apple Terminal)
 - **Ubuntu**: `./install_ubuntu.sh` (uses Snap for applications)
+- **WSL**: `./install_ubuntu.sh` from inside WSL — clone the repo into the WSL filesystem (e.g. `~/dotfiles`), **not** `/mnt/c/...`
 - **Server (Debian/Ubuntu)**: `./install_server.sh` (minimal Docker setup for headless servers)
 - **Windows**: `.\install_windows.ps1` (gaming + minimal dev setup)
 - **Other Debian-based**: `./install_debian_base.sh` (base functionality)
@@ -111,6 +113,18 @@ uv run src/main.py --list
 **What it configures**:
 - Zsh configuration, Git config, VSCode settings, Starship prompt, GNOME Terminal settings, mouse settings
 
+### WSL (Ubuntu on Windows)
+
+WSL is treated as a Linux machine — run `./install_ubuntu.sh` from inside WSL. The script detects WSL (via `WSL_DISTRO_NAME` / `/proc/version`) and **skips** GUI installs that don't make sense there: VSCode, Chrome, and Nerd Fonts. Install those on the Windows side via `install_windows.ps1`; Windows Terminal already renders fonts that Windows owns, and VSCode connects to WSL via the Remote-WSL extension.
+
+**Recommended setup**:
+
+1. Clone and run `install_windows.ps1` in Windows (sets up GUI apps, fonts, PowerShell).
+2. Inside WSL, clone the repo into the WSL filesystem (`git clone … ~/dotfiles`) — **do not** run from `/mnt/c/...`. Sharing the Windows checkout causes line-ending issues, slow file I/O, broken file watchers, and permission weirdness.
+3. Run `./install_ubuntu.sh` from `~/dotfiles`.
+
+Line endings are pinned via `.gitattributes` (`*.sh` → LF, `*.ps1` → CRLF), so cross-platform clones won't break shebangs.
+
 ### Server (Minimal Docker Setup)
 
 **Purpose**: Lightweight setup for headless Debian/Ubuntu servers, focused on Docker container management
@@ -170,6 +184,11 @@ See [CLAUDE.md](CLAUDE.md) for detailed development commands including:
 - Internet connection required for package downloads
 - Ubuntu uses Snap for applications
 - Some distributions may require manual package manager setup
+
+### WSL
+- Clone the repo into the WSL filesystem (`~/dotfiles`), not `/mnt/c/...`. Running scripts from the Windows mount produces `cannot execute: required file not found` errors when `core.autocrlf` rewrites shebangs to CRLF.
+- If you've already cloned under `/mnt/c/...` and hit that error, either re-clone into `~/dotfiles` or run `sed -i 's/\r$//' install_ubuntu.sh install_debian_base.sh` as a one-off fix.
+- Snap-based GUI apps are skipped automatically under WSL — install VSCode/Chrome on the Windows side and use the VSCode Remote-WSL extension.
 
 ## Design Philosophy
 

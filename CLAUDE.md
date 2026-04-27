@@ -9,6 +9,7 @@ This is a cross-platform dotfiles repository for setting up new computers and ke
 - **macOS**: Primary development environment
 - **Windows**: Gaming-focused with minimal development setup
 - **Linux (Ubuntu)**: Development environment
+- **WSL (Ubuntu on Windows)**: Development environment inside Windows; uses `install_ubuntu.sh`, which auto-detects WSL and skips GUI installs
 
 ## Development Commands
 
@@ -144,6 +145,13 @@ This repository follows a strict separation between **package installation** and
 - Uses Snap for applications (Chrome, VSCode)
 - Combines apt, Homebrew, and Snap for comprehensive package coverage
 - VSCode installed from Microsoft's official repository
+
+### WSL (Ubuntu on Windows)
+- Treated as a Linux machine — runs `install_ubuntu.sh`
+- The script detects WSL via `WSL_DISTRO_NAME` env var or `microsoft` in `/proc/version` (see `is_wsl()` in `install_ubuntu.sh`) and skips GUI installs: `install_vscode_ubuntu`, `install_chrome_ubuntu`, `install_nerd_fonts`. Those belong on the Windows side; fonts are owned by Windows Terminal, and VSCode connects to WSL via the Remote-WSL extension.
+- The repo should be **cloned inside the WSL filesystem** (e.g. `~/dotfiles`), not run from `/mnt/c/...`. Running from the Windows mount causes CRLF shebang errors, slow I/O, and broken file watchers.
+- Line endings are pinned via `.gitattributes` (`*.sh` → LF, `*.ps1`/`*.cmd`/`*.bat` → CRLF) so cross-platform clones don't break shebangs.
+- When adding a new install step that pulls in a GUI app or font, gate it behind `if is_wsl; then ... else ... fi` in `install_ubuntu.sh`'s `main_install`.
 
 ### Debian Base
 - `install_debian_base.sh` provides shared functionality for all Debian-based distros
