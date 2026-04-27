@@ -115,7 +115,13 @@ uv run src/main.py --list
 
 ### WSL (Ubuntu on Windows)
 
-WSL is treated as a Linux machine — run `./install_ubuntu.sh` from inside WSL. The script detects WSL (via `WSL_DISTRO_NAME` / `/proc/version`) and **skips** GUI installs that don't make sense there: VSCode, Chrome, and Nerd Fonts. Install those on the Windows side via `install_windows.ps1`; Windows Terminal already renders fonts that Windows owns, and VSCode connects to WSL via the Remote-WSL extension.
+WSL is treated as its own platform, distinct from native Linux. Run `./install_ubuntu.sh` from inside WSL — it detects WSL (via `WSL_DISTRO_NAME` / `/proc/version`) and tailors the install for headless development:
+
+**Installs** (everything you'd want for dev): zsh, fzf, gh, git, shellcheck, python3, golang, direnv, Homebrew + shfmt + rustup + zsh plugins, starship, uv, NVM + Node.
+
+**Skips** (belong on the Windows side): VSCode (use the Remote-WSL extension instead), Chrome, Nerd Fonts (Windows Terminal renders Windows-owned fonts).
+
+The Python config step (`src/main.py`) similarly runs only the WSL-relevant modules — `git`, `zsh`, `starship` — and skips `vscode`, `terminal`, and `mouse`.
 
 **Recommended setup**:
 

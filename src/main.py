@@ -7,6 +7,7 @@ Provides CLI interface for configuration management.
 import argparse
 import asyncio
 import importlib
+import os
 import platform
 import sys
 from pathlib import Path
@@ -54,6 +55,24 @@ Examples:
     return parser
 
 
+def is_wsl() -> bool:
+    """Detect whether we're running under WSL (Windows Subsystem for Linux)."""
+    if os.environ.get("WSL_DISTRO_NAME"):
+        return True
+    try:
+        with Path("/proc/version").open() as f:
+            return "microsoft" in f.read().lower()
+    except OSError:
+        return False
+
+
+def get_current_platform() -> str:
+    """Return the platform key for module selection. WSL is treated as its own platform."""
+    if is_wsl():
+        return "wsl"
+    return platform.system().lower()
+
+
 def get_platform_modules() -> dict[str, list[str]]:
     """Define which modules should run on each platform."""
     return {
@@ -62,22 +81,27 @@ def get_platform_modules() -> dict[str, list[str]]:
             "zsh",
             "starship",
             "vscode",
-            "osx"
+            "osx",
         ],
-        "linux": [  # Linux
+        "linux": [  # Linux (native)
             "git",
             "zsh",
             "starship",
             "vscode",
             "terminal",
-            "mouse"
+            "mouse",
+        ],
+        "wsl": [  # WSL: dev-only — VSCode runs on Windows via Remote-WSL, no GNOME desktop.
+            "git",
+            "zsh",
+            "starship",
         ],
         "windows": [  # Windows
             "git",
             "starship",
             "vscode",
-            "windows"
-        ]
+            "windows",
+        ],
     }
 
 
@@ -98,8 +122,8 @@ def list_available_modules() -> list[str]:
 def get_modules_for_platform(platform_name: str | None = None) -> list[str]:
     """Get the appropriate modules for the current or specified platform."""
     if platform_name is None:
-        platform_name = platform.system().lower()
-    
+        platform_name = get_current_platform()
+
     platform_modules = get_platform_modules()
     return platform_modules.get(platform_name, [])
 
@@ -138,9 +162,9 @@ async def run_module(module_name: str, dry_run: bool = False) -> bool:
 
 async def run_all_modules(dry_run: bool = False) -> bool:
     """Run all platform-appropriate setup modules."""
-    current_platform = platform.system().lower()
+    current_platform = get_current_platform()
     modules = get_modules_for_platform(current_platform)
-    
+
     if not modules:
         print(f"No modules configured for platform: {current_platform}")
         return True
@@ -165,14 +189,14 @@ async def main_async() -> int:
 
     if args.list:
         all_modules = list_available_modules()
-        current_platform = platform.system().lower()
+        current_platform = get_current_platform()
         platform_modules = get_modules_for_platform(current_platform)
-        
+
         print("Available modules:")
         for module in all_modules:
             status = "✓" if module in platform_modules else " "
             print(f"  {status} {module}")
-        
+
         print(f"\nModules for current platform ({current_platform}):")
         for module in platform_modules:
             print(f"  - {module}")

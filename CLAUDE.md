@@ -84,10 +84,11 @@ This is a cross-platform dotfiles repository that uses Python + uv for configura
 
 ### Module Platform Assignment
 
-The `src/main.py` file defines which modules run on each platform:
+The `src/main.py` file defines which modules run on each platform. WSL is detected separately (via `is_wsl()` — checks `WSL_DISTRO_NAME` env var, falls back to `microsoft` in `/proc/version`) and gets its own trimmed module list:
 
 - **macOS**: git, zsh, starship, vscode, osx
-- **Linux**: git, zsh, starship, vscode, terminal, mouse
+- **Linux** (native): git, zsh, starship, vscode, terminal, mouse
+- **WSL**: git, zsh, starship — `vscode`, `terminal`, and `mouse` are intentionally excluded (VSCode runs Windows-side via Remote-WSL; GNOME Terminal/Alacritty/gsettings don't apply)
 - **Windows**: git, starship, vscode, windows
 
 ## Design Principles
@@ -147,11 +148,11 @@ This repository follows a strict separation between **package installation** and
 - VSCode installed from Microsoft's official repository
 
 ### WSL (Ubuntu on Windows)
-- Treated as a Linux machine — runs `install_ubuntu.sh`
-- The script detects WSL via `WSL_DISTRO_NAME` env var or `microsoft` in `/proc/version` (see `is_wsl()` in `install_ubuntu.sh`) and skips GUI installs: `install_vscode_ubuntu`, `install_chrome_ubuntu`, `install_nerd_fonts`. Those belong on the Windows side; fonts are owned by Windows Terminal, and VSCode connects to WSL via the Remote-WSL extension.
+- Treated as its own platform, not native Linux. Runs `install_ubuntu.sh`, which detects WSL via `is_wsl()` (`WSL_DISTRO_NAME` env var or `microsoft` in `/proc/version`) and skips GUI installs: `install_vscode_ubuntu`, `install_chrome_ubuntu`, `install_nerd_fonts`.
+- `src/main.py` mirrors the same detection (`is_wsl()` + `get_current_platform()`) and selects the `wsl` module list (`git`, `zsh`, `starship`) — explicitly excluding `vscode`, `terminal`, and `mouse`.
 - The repo should be **cloned inside the WSL filesystem** (e.g. `~/dotfiles`), not run from `/mnt/c/...`. Running from the Windows mount causes CRLF shebang errors, slow I/O, and broken file watchers.
 - Line endings are pinned via `.gitattributes` (`*.sh` → LF, `*.ps1`/`*.cmd`/`*.bat` → CRLF) so cross-platform clones don't break shebangs.
-- When adding a new install step that pulls in a GUI app or font, gate it behind `if is_wsl; then ... else ... fi` in `install_ubuntu.sh`'s `main_install`.
+- When adding a new install step that pulls in a GUI app or font, gate it behind `if is_wsl; then ... else ... fi` in `install_ubuntu.sh`'s `main_install`. When adding a new Python module that targets a Linux desktop, add it to the `linux` list in `get_platform_modules()` but **not** the `wsl` list.
 
 ### Debian Base
 - `install_debian_base.sh` provides shared functionality for all Debian-based distros
