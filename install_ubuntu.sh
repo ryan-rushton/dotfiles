@@ -12,6 +12,11 @@ trap 'echo "Error on line $LINENO. Exit code: $?"' ERR
 # Source the shared Debian base functionality
 source "$(dirname "$0")/install_debian_base.sh"
 
+# Detect WSL — GUI apps and Snap should be skipped; install them on the Windows side instead.
+is_wsl() {
+    [ -n "${WSL_DISTRO_NAME:-}" ] || grep -qi microsoft /proc/version 2>/dev/null
+}
+
 # Ubuntu-specific function to install Chrome via wget/dpkg
 install_chrome_ubuntu() {
     if command -v google-chrome >/dev/null 2>&1; then
@@ -45,16 +50,22 @@ main_install() {
     check_sudo
     install_base_packages
     setup_zsh
-    install_vscode_ubuntu
     install_homebrew
     install_brew_packages
-    install_nerd_fonts
     install_starship
     install_uv
     install_node
-    install_chrome_ubuntu
+
+    if is_wsl; then
+        echo "WSL detected — skipping GUI apps (VSCode, Chrome, Nerd Fonts). Install those on the Windows side."
+    else
+        install_vscode_ubuntu
+        install_nerd_fonts
+        install_chrome_ubuntu
+    fi
+
     setup_dotfiles
-    
+
     echo 'Please restart your terminal.'
 }
 
