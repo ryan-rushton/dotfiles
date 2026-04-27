@@ -1,8 +1,9 @@
 """
 Mouse and peripheral configuration setup module.
 
-Sets up mouse and peripheral configuration for Pop OS including
-mouse speed, acceleration profile, scroll direction, and double-click timing.
+Sets up mouse and peripheral configuration for Ubuntu / GNOME desktops,
+including mouse speed, acceleration profile, scroll direction, and
+double-click timing. Skipped under WSL (no GNOME desktop).
 """
 
 import asyncio

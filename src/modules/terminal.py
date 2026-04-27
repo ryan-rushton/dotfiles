@@ -1,8 +1,9 @@
 """
 Terminal configuration setup module.
 
-Sets up terminal configuration for Pop OS including GNOME Terminal
-keybindings and Alacritty config for better Ctrl+V/P support.
+Sets up terminal configuration for Ubuntu / GNOME desktops, including
+GNOME Terminal keybindings and Alacritty config for better Ctrl+V/P
+support. Skipped under WSL (no GNOME desktop).
 """
 
 import asyncio
@@ -13,8 +14,8 @@ from ..utils.file_ops import create_symlink, mkdir
 
 
 async def setup() -> None:
-    """Set up terminal configuration for Pop OS."""
-    print("Setting up terminal configuration for Pop OS")
+    """Set up terminal configuration for Ubuntu / GNOME desktops."""
+    print("Setting up terminal configuration")
 
     try:
         # Setup GNOME Terminal keybindings (fallback/default)
