@@ -65,7 +65,7 @@ function Install-Applications {
     $generalApps = @(
         "AgileBits.1Password",
         "Google.Chrome",
-        "Google.Drive"
+        "Google.GoogleDrive"
     )
     
     # Development tools
