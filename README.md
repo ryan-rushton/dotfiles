@@ -17,7 +17,7 @@ Choose your platform and run the appropriate installer script:
 - **Ubuntu**: `./install_ubuntu.sh` (uses Snap for applications)
 - **WSL**: `./install_ubuntu.sh` from inside WSL — clone the repo into the WSL filesystem (e.g. `~/dotfiles`), **not** `/mnt/c/...`
 - **Server (Debian/Ubuntu)**: `./install_server.sh` (minimal Docker setup for headless servers)
-- **Windows**: `.\install_windows.ps1` (gaming + minimal dev setup) — or run directly online via:
+- **Windows**: In Windows Terminal, enable **Settings -> System -> Advanced -> Enable sudo** first, then run `.\install_windows.ps1` (gaming + minimal dev setup) — or run directly online via:
   ```powershell
   Set-ExecutionPolicy RemoteSigned -Scope Process -Force; irm https://raw.githubusercontent.com/ryan-rushton/dotfiles/main/install_windows.ps1 | iex
   ```
@@ -185,6 +185,7 @@ See [CLAUDE.md](CLAUDE.md) for detailed development commands including:
 
 ### Windows
 - Run PowerShell as Administrator
+- In Windows Terminal, enable **Settings -> System -> Advanced -> Enable sudo** before running the installer
 - Ensure execution policy allows script execution: `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
 - Install will configure package managers automatically
 

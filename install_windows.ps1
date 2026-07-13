@@ -256,7 +256,8 @@ function Add-Symlink {
             New-Item -ItemType SymbolicLink -Path $Path -Value $Target -Force
         }
         elseif (Get-Command sudo -ErrorAction SilentlyContinue) {
-            sudo New-Item -ItemType SymbolicLink -Path $Path -Value $Target -Force
+            $psExe = if ($PSVersionTable.PSVersion.Major -ge 6) { "pwsh.exe" } else { "powershell.exe" }
+            sudo $psExe -NoProfile -Command "New-Item -ItemType SymbolicLink -Path '$Path' -Value '$Target' -Force"
         }
         else {
             Write-Error "Administrator privileges are required to create symbolic links. Please run PowerShell as Administrator."
@@ -277,15 +278,16 @@ function Setup-PowerShellProfiles {
     $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { "." }
     $profileSource = (Get-Item "$scriptDir\config\powershell\Microsoft.PowerShell_profile.ps1").FullName
     
-    # Use Split-Path $PROFILE to get the correct directory regardless of OneDrive redirection
+    # Get the base Documents folder path (handles OneDrive redirection correctly)
+    $documentsDir = [System.Environment]::GetFolderPath('MyDocuments')
+    
     # PowerShell Core (7+)
-    $corePSDir = Split-Path $PROFILE
+    $corePSDir = Join-Path $documentsDir "PowerShell"
     mkdir $corePSDir -Force | Out-Null
     Add-Symlink -Path "$corePSDir\Microsoft.PowerShell_profile.ps1" -Target $profileSource
     Add-Symlink -Path "$corePSDir\Microsoft.VSCode_profile.ps1" -Target $profileSource
     
-    # Windows PowerShell (5.1) - derive from the same Documents base
-    $documentsDir = Split-Path $corePSDir
+    # Windows PowerShell (5.1)
     $windowsPSDir = Join-Path $documentsDir "WindowsPowerShell"
     mkdir $windowsPSDir -Force | Out-Null
     Add-Symlink -Path "$windowsPSDir\Microsoft.PowerShell_profile.ps1" -Target $profileSource
@@ -356,10 +358,19 @@ function Start-WindowsInstall {
     # Check if running as Admin at the start
     $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if (-not $isAdmin) {
-        Write-Warning "This script is not running as Administrator. Some installations and configurations (like NVM, build tools, or symlinks) may fail or prompt for elevation."
-        Write-Host "It is highly recommended to run this script in an Administrator PowerShell session."
-        Write-Host "Press any key to continue anyway, or Ctrl+C to cancel..."
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        if ($PSCommandPath) {
+            Write-Warning "This script is not running as Administrator."
+            Write-Host "Relaunching the script as Administrator in a new window..."
+            $psExe = if ($PSVersionTable.PSVersion.Major -ge 6) { "pwsh.exe" } else { "powershell.exe" }
+            Start-Process -FilePath $psExe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+            return
+        }
+        else {
+            Write-Warning "This script is not running as Administrator. Some installations and configurations (like NVM, build tools, or symlinks) may fail or prompt for elevation."
+            Write-Host "It is highly recommended to run this script in an Administrator PowerShell session."
+            Write-Host "Press any key to continue anyway, or Ctrl+C to cancel..."
+            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        }
     }
 
     Install-Scoop
