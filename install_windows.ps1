@@ -311,6 +311,26 @@ function Setup-Dotfiles {
     Write-Host "Running dotfiles configuration..."
     $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { "." }
     Push-Location $scriptDir
+    
+    # If this directory is not a git repository, convert it into one
+    if (-not (Test-Path "$scriptDir\.git")) {
+        Write-Host "Converting dotfiles directory into a Git repository..."
+        if (Get-Command git -ErrorAction SilentlyContinue) {
+            try {
+                git init -b main
+                git remote add origin https://github.com/ryan-rushton/dotfiles.git
+                git fetch origin
+                git reset --hard origin/main
+                git branch --set-upstream-to=origin/main main
+                Write-Host "✅ Successfully initialized Git repository and set origin to track main!"
+            } catch {
+                Write-Warning "Failed to convert directory to Git repository: $_"
+            }
+        } else {
+            Write-Warning "Git command not found. Skipping Git repository conversion."
+        }
+    }
+
     uv run src/main.py
     Pop-Location
 }
