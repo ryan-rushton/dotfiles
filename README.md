@@ -17,7 +17,10 @@ Choose your platform and run the appropriate installer script:
 - **Ubuntu**: `./install_ubuntu.sh` (uses Snap for applications)
 - **WSL**: `./install_ubuntu.sh` from inside WSL — clone the repo into the WSL filesystem (e.g. `~/dotfiles`), **not** `/mnt/c/...`
 - **Server (Debian/Ubuntu)**: `./install_server.sh` (minimal Docker setup for headless servers)
-- **Windows**: `.\install_windows.ps1` (gaming + minimal dev setup)
+- **Windows**: `.\install_windows.ps1` (gaming + minimal dev setup) — or run directly online via:
+  ```powershell
+  Set-ExecutionPolicy RemoteSigned -Scope Process -Force; irm https://raw.githubusercontent.com/ryan-rushton/dotfiles/main/install_windows.ps1 | iex
+  ```
 - **Other Debian-based**: `./install_debian_base.sh` (base functionality)
 
 All install scripts are **idempotent** - safe to run multiple times without adverse effects.
@@ -80,7 +83,7 @@ uv run src/main.py --list
 - **Development Tools**: Xcode command line tools, NVM + Node.js LTS
 - **CLI Tools**: fzf, gh, git, python3, rustup, shellcheck, shfmt, starship, uv
 - **Zsh Plugins**: zsh-autosuggestions, zsh-history-substring-search
-- **Applications**: 1Password, Arc Browser, Discord, Chrome, Google Drive, VSCode
+- **Applications**: 1Password, Discord, Chrome, Google Drive, VSCode
 - **Fonts**: FiraCode Nerd Font via Homebrew
 
 **What it configures**:
@@ -92,7 +95,7 @@ uv run src/main.py --list
 
 **What it installs**:
 - **Package Managers**: Scoop (CLI tools), Winget (applications)
-- **Core Apps**: 1Password, Arc Browser, Chrome, Google Drive
+- **Core Apps**: 1Password, Chrome, Google Drive
 - **Development**: Git, GitHub CLI, NVM, Node.js, Python, Rust, VSCode, Visual Studio Build Tools, PowerShell 7, Starship
 - **Gaming**: Discord, Steam, Epic Games, Ubisoft Connect, Logitech G Hub, GeForce Experience
 - **Fonts**: FiraCode Nerd Font via Scoop

@@ -1,3 +1,40 @@
+# Self-bootstrapping for online execution (e.g. via irm | iex)
+$scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { "." }
+$hasRepoFiles = (Test-Path "$scriptDir\config\powershell\Microsoft.PowerShell_profile.ps1") -and (Test-Path "$scriptDir\src\main.py")
+
+if (-not $hasRepoFiles) {
+    Write-Host "Running in standalone/online mode. Downloading full dotfiles repository..."
+    $dest = "$HOME\Dev\dotfiles"
+    
+    $zipPath = "$env:TEMP\dotfiles.zip"
+    $tempExtract = "$env:TEMP\dotfiles-temp"
+    
+    Write-Host "Downloading repository ZIP from GitHub..."
+    Invoke-RestMethod -Uri "https://github.com/ryan-rushton/dotfiles/archive/refs/heads/main.zip" -OutFile $zipPath
+    
+    Write-Host "Extracting repository..."
+    if (Test-Path $tempExtract) { Remove-Item $tempExtract -Recurse -Force }
+    Expand-Archive -Path $zipPath -DestinationPath $tempExtract -Force
+    
+    Write-Host "Setting up target directory at $dest..."
+    if (Test-Path $dest) {
+        Write-Warning "Target directory $dest already exists. Replacing it..."
+        Remove-Item $dest -Recurse -Force
+    }
+    New-Item -ItemType Directory -Force (Split-Path $dest) | Out-Null
+    Move-Item -Path "$tempExtract\dotfiles-main" -Destination $dest -Force
+    
+    Remove-Item -Path $zipPath -Force
+    
+    Write-Host "Repository downloaded successfully to $dest!"
+    Write-Host "Restarting installer from $dest..."
+    
+    Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+    cd $dest
+    & "$dest\install_windows.ps1"
+    return
+}
+
 # Function to install Scoop package manager
 function Install-Scoop {
     Write-Host "Setting up Scoop package manager..."
@@ -9,6 +46,8 @@ function Install-Scoop {
         Write-Host "Installing Scoop..."
         Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
         Invoke-RestMethod get.scoop.sh | Invoke-Expression
+        # Refresh current session path so scoop commands are immediately available
+        Update-EnvironmentPath
         scoop bucket add java
         scoop install sudo
     }
@@ -16,14 +55,18 @@ function Install-Scoop {
 
 # Function to install applications via Winget
 function Install-Applications {
+    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+        Write-Warning "winget (Windows Package Manager) was not found. Skipping Winget installations."
+        return
+    }
+    
     Write-Host "Installing applications via Winget..."
     
     # Core applications to install
     $generalApps = @(
         "AgileBits.1Password",
         "Google.Chrome",
-        "Google.Drive",
-        "TheBrowserCompany.Arc"
+        "Google.Drive"
     )
     
     # Development tools
@@ -151,17 +194,48 @@ function Update-EnvironmentPath {
     
     # Add VSCode to PATH if not already present
     $vscodePath = "${env:LOCALAPPDATA}\Programs\Microsoft VS Code\bin"
-    $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
+    $userPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
     
-    if ((Test-Path $vscodePath) -and ($currentPath -notlike "*$vscodePath*")) {
+    if ((Test-Path $vscodePath) -and ($userPath -notlike "*$vscodePath*")) {
         Write-Host "Adding VSCode to PATH..."
-        $newPath = $currentPath + ";" + $vscodePath
-        [System.Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+        $userPath = $userPath + ";" + $vscodePath
+        [System.Environment]::SetEnvironmentVariable("Path", $userPath, "User")
     }
     
-    # Refresh current session PATH
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + `
-        [System.Environment]::GetEnvironmentVariable("Path", "User")
+    # Refresh current session PATH from registry
+    $machinePath = [System.Environment]::GetEnvironmentVariable("Path", "Machine")
+    $env:Path = $machinePath + ";" + $userPath
+
+    # Explicitly append common installer paths to current session PATH if they exist but aren't in registry yet
+    $scoopShimPath = "$HOME\scoop\shims"
+    if ((Test-Path $scoopShimPath) -and ($env:Path -notlike "*$scoopShimPath*")) {
+        $env:Path += ";$scoopShimPath"
+    }
+    
+    $uvBinPath = "$HOME\.local\bin"
+    if ((Test-Path $uvBinPath) -and ($env:Path -notlike "*$uvBinPath*")) {
+        $env:Path += ";$uvBinPath"
+    }
+
+    $nvmPath = "${env:APPDATA}\nvm"
+    if ((Test-Path $nvmPath) -and ($env:Path -notlike "*$nvmPath*")) {
+        $env:Path += ";$nvmPath"
+    }
+
+    # Refresh NVM environment variables in current session
+    $nvmHome = [System.Environment]::GetEnvironmentVariable("NVM_HOME", "User")
+    if ($nvmHome) {
+        $env:NVM_HOME = $nvmHome
+    } elseif (Test-Path $nvmPath) {
+        $env:NVM_HOME = $nvmPath
+    }
+    
+    $nvmSymlink = [System.Environment]::GetEnvironmentVariable("NVM_SYMLINK", "User")
+    if ($nvmSymlink) {
+        $env:NVM_SYMLINK = $nvmSymlink
+    } elseif (Test-Path $nvmPath) {
+        $env:NVM_SYMLINK = "${env:ProgramFiles}\nodejs"
+    }
 }
 
 # Function to Create Symlinks
@@ -173,7 +247,17 @@ function Add-Symlink {
     
     if (-Not (Test-Path -Path $Path) -And (Test-Path -Path $Target)) {
         Write-Host "Creating symlink: $Path -> $Target"
-        sudo New-Item -ItemType SymbolicLink -Path $Path -Value $Target -Force
+        
+        $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+        if ($isAdmin) {
+            New-Item -ItemType SymbolicLink -Path $Path -Value $Target -Force
+        }
+        elseif (Get-Command sudo -ErrorAction SilentlyContinue) {
+            sudo New-Item -ItemType SymbolicLink -Path $Path -Value $Target -Force
+        }
+        else {
+            Write-Error "Administrator privileges are required to create symbolic links. Please run PowerShell as Administrator."
+        }
     }
     elseif (Test-Path -Path $Path) {
         Write-Host "Symlink already exists: $Path"
@@ -187,7 +271,8 @@ function Add-Symlink {
 function Setup-PowerShellProfiles {
     Write-Host "Setting up PowerShell profiles..."
     
-    $profileSource = (Get-Item ".\config\powershell\Microsoft.PowerShell_profile.ps1").FullName
+    $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { "." }
+    $profileSource = (Get-Item "$scriptDir\config\powershell\Microsoft.PowerShell_profile.ps1").FullName
     
     # Windows PowerShell (5.1)
     $windowsPSDir = "$HOME\Documents\WindowsPowerShell"
@@ -208,8 +293,16 @@ function Install-Node {
     
     # Install and Use Latest LTS Node.js
     if (Get-Command nvm -ErrorAction SilentlyContinue) {
-        sudo nvm install lts
-        nvm use lts
+        # Check if already elevated; if so, run without sudo
+        $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+        if ($isAdmin) {
+            nvm install lts
+            nvm use lts
+        }
+        else {
+            sudo nvm install lts
+            nvm use lts
+        }
     }
     else {
         Write-Host "NVM not found. Install CoreyButler.NVMforWindows first."
@@ -219,7 +312,10 @@ function Install-Node {
 # Function to setup dotfiles configuration
 function Setup-Dotfiles {
     Write-Host "Running dotfiles configuration..."
+    $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { "." }
+    Push-Location $scriptDir
     uv run src/main.py
+    Pop-Location
 }
 
 # Function to load PowerShell profile
@@ -232,12 +328,28 @@ function Load-PowerShellProfile {
 
 # Main installation function
 function Start-WindowsInstall {
+    # Check if running as Admin at the start
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    if (-not $isAdmin) {
+        Write-Warning "This script is not running as Administrator. Some installations and configurations (like NVM, build tools, or symlinks) may fail or prompt for elevation."
+        Write-Host "It is highly recommended to run this script in an Administrator PowerShell session."
+        Write-Host "Press any key to continue anyway, or Ctrl+C to cancel..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    }
+
     Install-Scoop
     Install-Applications
+    
+    # Refresh PATH after package installations so NVM, git, etc. are available
+    Update-EnvironmentPath
+    
     Install-UV
+    
+    # Refresh PATH again to pick up uv
+    Update-EnvironmentPath
+    
     Install-Node
     Install-NerdFonts
-    Update-EnvironmentPath
     Setup-PowerShellProfiles
     Setup-Dotfiles
     Load-PowerShellProfile
