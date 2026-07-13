@@ -119,7 +119,13 @@ function Install-WingetApp {
         [array]$ExecuteOnInstall
     )
     
-    if (winget list --id $AppId 2>$null) {
+    # Use exit code to reliably detect if the app is installed.
+    # winget list always outputs a header, so checking its output is not reliable —
+    # it exits 0 when the app is found and non-zero when it is not.
+    winget list --id $AppId --exact --accept-source-agreements | Out-Null
+    $isInstalled = $LASTEXITCODE -eq 0
+
+    if ($isInstalled) {
         if (-Not $DontUpdate.Contains($AppId)) {
             Write-Host "$AppId is already installed, upgrading..."
             winget upgrade -h --id $AppId --silent --accept-package-agreements --accept-source-agreements
