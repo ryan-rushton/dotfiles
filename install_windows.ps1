@@ -119,7 +119,7 @@ function Install-WingetApp {
         [array]$ExecuteOnInstall
     )
     
-    if (winget list --id $AppId 2>$null) {
+    if (winget list --id $AppId --accept-source-agreements 2>$null) {
         if (-Not $DontUpdate.Contains($AppId)) {
             Write-Host "$AppId is already installed, upgrading..."
             winget upgrade -h --id $AppId --silent --accept-package-agreements --accept-source-agreements
@@ -130,7 +130,12 @@ function Install-WingetApp {
     }
     elseif ($ExecuteOnInstall.Contains($AppId)) {
         Write-Host "Installing (with special execution): $AppId"
-        winget install -e -h --id $AppId --silent --accept-package-agreements --accept-source-agreements
+        if ($AppId -eq "Microsoft.VisualStudio.2022.BuildTools") {
+            winget install -e -h --id $AppId --silent --accept-package-agreements --accept-source-agreements --override "--quiet --wait --norestart"
+        }
+        else {
+            winget install -e -h --id $AppId --silent --accept-package-agreements --accept-source-agreements
+        }
     }
     else {
         Write-Host "Installing: $AppId"
