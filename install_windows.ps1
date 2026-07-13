@@ -48,7 +48,6 @@ function Install-Scoop {
         Invoke-RestMethod get.scoop.sh | Invoke-Expression
         # Refresh current session path so scoop commands are immediately available
         Update-EnvironmentPath
-        scoop bucket add java
         scoop install sudo
     }
 }
@@ -77,18 +76,18 @@ function Install-Applications {
         "Microsoft.Powershell",
         "Microsoft.VisualStudio.2022.BuildTools",
         "Microsoft.VisualStudioCode",
-        "EclipseAdoptium.Temurin.25.JDK",
         "Python.Python.3.14",
-        "Rustlang.Rustup",
         "Starship.Starship"
     )
     
     # Gaming applications
     $gamingApps = @(
+        "Asus.ArmouryCrate",
         "Discord.Discord",
         "EpicGames.EpicGamesLauncher",
         "Logitech.GHUB",
         "Nvidia.GeForceExperience",
+        "SteelSeries.GG",
         "Ubisoft.Connect",
         "Valve.Steam"
     )
@@ -98,14 +97,12 @@ function Install-Applications {
     
     # Applications that Cannot Be Updated via Winget
     $dontUpdate = @(
-        "Discord.Discord",
-        "Rustlang.Rustup"
+        "Discord.Discord"
     )
     
     # Applications that Require Execution on Install
     $executeOnInstall = @(
-        "Microsoft.VisualStudio.2022.BuildTools",
-        "Rustlang.Rustup"
+        "Microsoft.VisualStudio.2022.BuildTools"
     )
     
     # Install each application

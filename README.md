@@ -96,8 +96,8 @@ uv run src/main.py --list
 **What it installs**:
 - **Package Managers**: Scoop (CLI tools), Winget (applications)
 - **Core Apps**: 1Password, Chrome, Google Drive
-- **Development**: Git, GitHub CLI, NVM, Node.js, Python, Rust, VSCode, Visual Studio Build Tools, PowerShell 7, Starship
-- **Gaming**: Discord, Steam, Epic Games, Ubisoft Connect, Logitech G Hub, GeForce Experience
+- **Development**: Git, GitHub CLI, NVM, Node.js, Python, VSCode, Visual Studio Build Tools, PowerShell 7, Starship
+- **Gaming**: Asus ArmouryCrate, Discord, Epic Games, Logitech G Hub, Nvidia GeForce Experience, SteelSeries GG, Ubisoft Connect, Steam
 - **Fonts**: FiraCode Nerd Font via Scoop
 
 **What it configures**:
