@@ -277,17 +277,19 @@ function Setup-PowerShellProfiles {
     $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { "." }
     $profileSource = (Get-Item "$scriptDir\config\powershell\Microsoft.PowerShell_profile.ps1").FullName
     
-    # Windows PowerShell (5.1)
-    $windowsPSDir = "$HOME\Documents\WindowsPowerShell"
-    mkdir $windowsPSDir -Force | Out-Null
-    Add-Symlink -Path "$windowsPSDir\Microsoft.PowerShell_profile.ps1" -Target $profileSource
-    Add-Symlink -Path "$windowsPSDir\Microsoft.VSCode_profile.ps1" -Target $profileSource
-    
+    # Use Split-Path $PROFILE to get the correct directory regardless of OneDrive redirection
     # PowerShell Core (7+)
-    $corePSDir = "$HOME\Documents\PowerShell"
+    $corePSDir = Split-Path $PROFILE
     mkdir $corePSDir -Force | Out-Null
     Add-Symlink -Path "$corePSDir\Microsoft.PowerShell_profile.ps1" -Target $profileSource
     Add-Symlink -Path "$corePSDir\Microsoft.VSCode_profile.ps1" -Target $profileSource
+    
+    # Windows PowerShell (5.1) - derive from the same Documents base
+    $documentsDir = Split-Path $corePSDir
+    $windowsPSDir = Join-Path $documentsDir "WindowsPowerShell"
+    mkdir $windowsPSDir -Force | Out-Null
+    Add-Symlink -Path "$windowsPSDir\Microsoft.PowerShell_profile.ps1" -Target $profileSource
+    Add-Symlink -Path "$windowsPSDir\Microsoft.VSCode_profile.ps1" -Target $profileSource
 }
 
 # Function to install Node.js via NVM
