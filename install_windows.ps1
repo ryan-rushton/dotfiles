@@ -136,12 +136,7 @@ function Install-WingetApp {
     }
     elseif ($ExecuteOnInstall.Contains($AppId)) {
         Write-Host "Installing (with special execution): $AppId"
-        if ($AppId -eq "Microsoft.VisualStudio.2022.BuildTools") {
-            winget install -e -h --id $AppId --silent --accept-package-agreements --accept-source-agreements --override "--quiet --wait --norestart"
-        }
-        else {
-            winget install -e -h --id $AppId --silent --accept-package-agreements --accept-source-agreements
-        }
+        winget install -e -h --id $AppId --silent --accept-package-agreements --accept-source-agreements
     }
     else {
         Write-Host "Installing: $AppId"
