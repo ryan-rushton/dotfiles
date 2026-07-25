@@ -86,7 +86,6 @@ function Install-Applications {
         "Discord.Discord",
         "EpicGames.EpicGamesLauncher",
         "Logitech.GHUB",
-        "Nvidia.GeForceExperience",
         "SteelSeries.GG",
         "Ubisoft.Connect",
         "Valve.Steam"
@@ -284,14 +283,16 @@ function Setup-PowerShellProfiles {
     # PowerShell Core (7+)
     $corePSDir = Join-Path $documentsDir "PowerShell"
     mkdir $corePSDir -Force | Out-Null
-    Add-Symlink -Path "$corePSDir\Microsoft.PowerShell_profile.ps1" -Target $profileSource
-    Add-Symlink -Path "$corePSDir\Microsoft.VSCode_profile.ps1" -Target $profileSource
+    Copy-Item -Path $profileSource -Destination "$corePSDir\Microsoft.PowerShell_profile.ps1" -Force
+    Copy-Item -Path $profileSource -Destination "$corePSDir\Microsoft.VSCode_profile.ps1" -Force
+    Write-Host "✅ Copied profiles to PowerShell Core directory: $corePSDir"
     
     # Windows PowerShell (5.1)
     $windowsPSDir = Join-Path $documentsDir "WindowsPowerShell"
     mkdir $windowsPSDir -Force | Out-Null
-    Add-Symlink -Path "$windowsPSDir\Microsoft.PowerShell_profile.ps1" -Target $profileSource
-    Add-Symlink -Path "$windowsPSDir\Microsoft.VSCode_profile.ps1" -Target $profileSource
+    Copy-Item -Path $profileSource -Destination "$windowsPSDir\Microsoft.PowerShell_profile.ps1" -Force
+    Copy-Item -Path $profileSource -Destination "$windowsPSDir\Microsoft.VSCode_profile.ps1" -Force
+    Write-Host "✅ Copied profiles to Windows PowerShell directory: $windowsPSDir"
 }
 
 # Function to install Node.js via NVM
