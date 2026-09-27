@@ -20,22 +20,24 @@ config.font = wezterm.font_with_fallback({
 })
 config.font_size = 11.5
 
--- Window appearance
+-- Window appearance & title bar
 config.window_padding = {
   left = 8,
   right = 8,
   top = 8,
   bottom = 8,
 }
-config.window_decorations = 'RESIZE'
+-- Show integrated window management buttons (minimize, maximize, close) in the header
+config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
 config.window_close_confirmation = 'NeverPrompt'
 config.scrollback_lines = 10000
 config.enable_scroll_bar = false
 
--- Tab bar
-config.use_fancy_tab_bar = false
+-- Tab bar / Header
+-- Keep the header always visible so close buttons, tabs, and the launcher '+' are always accessible
+config.use_fancy_tab_bar = true
 config.tab_bar_at_bottom = false
-config.hide_tab_bar_if_only_one_tab = true
+config.hide_tab_bar_if_only_one_tab = false
 
 -- VSCode-matching dark color theme
 config.colors = {
@@ -164,9 +166,18 @@ config.keys = {
   { key = 'Tab', mods = 'CTRL', action = act.ActivateTabRelative(1) },
   { key = 'Tab', mods = 'CTRL|SHIFT', action = act.ActivateTabRelative(-1) },
 
-  -- Search
+  -- Search & Command Palette
   { key = 'f', mods = 'CTRL|SHIFT', action = act.Search({ CaseSensitiveString = '' }) },
   { key = 'f', mods = 'CMD', action = act.Search({ CaseSensitiveString = '' }) },
+  { key = 'p', mods = 'CTRL|SHIFT', action = act.ActivateCommandPalette },
+  { key = 'p', mods = 'CMD|SHIFT', action = act.ActivateCommandPalette },
+
+  -- Launcher, Config & Debug
+  { key = 'l', mods = 'CTRL|SHIFT', action = act.ShowLauncher },
+  { key = 'l', mods = 'CMD|SHIFT', action = act.ShowLauncher },
+  { key = 'r', mods = 'CTRL|SHIFT', action = act.ReloadConfiguration },
+  { key = 'r', mods = 'CMD|SHIFT', action = act.ReloadConfiguration },
+  { key = 'F12', action = act.ShowDebugOverlay },
 
   -- Font Size
   { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
