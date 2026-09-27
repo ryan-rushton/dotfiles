@@ -38,6 +38,36 @@ config.enable_scroll_bar = false
 config.use_fancy_tab_bar = true
 config.tab_bar_at_bottom = false
 config.hide_tab_bar_if_only_one_tab = false
+config.tab_max_width = 32
+
+-- Native (Fancy) Tab Bar appearance settings
+-- (https://wezterm.org/config/appearance.html#native-fancy-tab-bar-appearance)
+config.window_frame = {
+  font = wezterm.font_with_fallback({
+    'FiraCode Nerd Font',
+    'Fira Code',
+    'Segoe UI',
+  }),
+  font_size = 10.5,
+
+  -- Title bar / tab bar background colors
+  active_titlebar_bg = '#181818',
+  inactive_titlebar_bg = '#181818',
+  active_titlebar_fg = '#ffffff',
+  inactive_titlebar_fg = '#969696',
+
+  -- Window controls (minimize, maximize, close) colors in the fancy tab bar
+  button_bg = '#181818',
+  button_fg = '#cccccc',
+  button_hover_bg = '#333333',
+  button_hover_fg = '#ffffff',
+
+  -- Border styling
+  border_left_color = '#181818',
+  border_right_color = '#181818',
+  border_bottom_color = '#252526',
+  border_top_color = '#181818',
+}
 
 -- VSCode-matching dark color theme
 config.colors = {
