@@ -87,5 +87,5 @@ function _gs() {
 }
 New-Alias -Name gs -Value _gs
 
-
 Invoke-Expression (&starship init powershell)
+

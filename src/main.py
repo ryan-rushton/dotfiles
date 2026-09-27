@@ -7,10 +7,16 @@ Provides CLI interface for configuration management.
 import argparse
 import asyncio
 import importlib
+import io
 import os
 import platform
 import sys
 from pathlib import Path
+
+# Ensure UTF-8 output encoding for cross-platform symbols
+for stream in (sys.stdout, sys.stderr):
+    if isinstance(stream, io.TextIOWrapper):
+        stream.reconfigure(encoding="utf-8", errors="replace")
 
 
 def setup_argparser() -> argparse.ArgumentParser:
@@ -81,6 +87,8 @@ def get_platform_modules() -> dict[str, list[str]]:
             "zsh",
             "starship",
             "vscode",
+            "antigravity",
+            "wezterm",
             "osx",
         ],
         "linux": [  # Linux (native)
@@ -88,18 +96,23 @@ def get_platform_modules() -> dict[str, list[str]]:
             "zsh",
             "starship",
             "vscode",
+            "antigravity",
+            "wezterm",
             "terminal",
             "mouse",
         ],
-        "wsl": [  # WSL: dev-only — VSCode runs on Windows via Remote-WSL, no GNOME desktop.
+        "wsl": [  # WSL: dev-only — VSCode and WezTerm run on Windows, no GUI desktop.
             "git",
             "zsh",
             "starship",
+            "antigravity",
         ],
         "windows": [  # Windows
             "git",
             "starship",
             "vscode",
+            "antigravity",
+            "wezterm",
             "windows",
         ],
     }

@@ -118,6 +118,16 @@ install_node() {
     set -u
 }
 
+# Function to install Antigravity CLI (agy)
+install_antigravity_cli() {
+    echo "Installing Antigravity CLI..."
+    if ! command -v agy >/dev/null 2>&1; then
+        curl -fsSL https://antigravity.google/cli/install.sh | bash || echo "⚠️ Antigravity CLI automated install skipped. Visit https://antigravity.google/docs/cli to install."
+    else
+        echo "Antigravity CLI is already installed."
+    fi
+}
+
 # Function to setup dotfiles configuration
 setup_dotfiles() {
     echo "Running dotfiles configuration..."
@@ -136,6 +146,7 @@ main_install() {
     install_vs_code
     install_uv
     install_node
+    install_antigravity_cli
     setup_dotfiles
 
     echo 'Please restart your terminal.'

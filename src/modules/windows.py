@@ -12,12 +12,6 @@ from pathlib import Path
 
 from ..utils.file_ops import create_symlink, get_platform
 
-# Import other modules for Windows setup
-try:
-    from . import git, starship, vscode
-except ImportError:
-    git = starship = vscode = None  # type: ignore
-
 SETTINGS_FILE = "settings.json"
 
 
@@ -29,9 +23,7 @@ async def setup_windows_terminal() -> None:
     local_app_data = os.environ.get("LOCALAPPDATA")
 
     if not local_app_data:
-        print(
-            "Cannot install windows terminal settings because LOCALAPPDATA cannot be resolved."
-        )
+        print("Cannot install windows terminal settings because LOCALAPPDATA cannot be resolved.")
         return
 
     # Target comes from https://learn.microsoft.com/en-us/windows/terminal/install#settings-json-file
@@ -60,28 +52,6 @@ async def setup() -> None:
         return
 
     print("Setting up Windows-specific configuration")
-
-    # Run other setup modules
-    # Note: In Python, we handle this differently than TypeScript imports
-    try:
-        if git:
-            print("Running git setup...")
-            await git.setup()
-
-        if starship:
-            print("Running starship setup...")
-            await starship.setup()
-
-        if vscode:
-            print("Running vscode setup...")
-            await vscode.setup()
-
-        if not any([git, starship, vscode]):
-            print("⚠️  Could not import setup modules")
-            print("   Please run individual modules manually")
-
-    except Exception as e:
-        print(f"⚠️  Error running generic setup modules: {e}")
 
     # Setup Windows Terminal
     await setup_windows_terminal()
