@@ -58,11 +58,6 @@ if command -v direnv &> /dev/null; then
     eval "$(direnv hook zsh)"
 fi
 
-# Antigravity CLI completion
-if command -v agy &> /dev/null; then
-    eval "$(agy completion zsh 2>/dev/null)" || true
-fi
-
 # Enable starship (must go last)
 eval "$(starship init zsh)"
 
