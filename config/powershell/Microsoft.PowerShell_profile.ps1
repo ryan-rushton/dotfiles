@@ -87,5 +87,12 @@ function _gs() {
 }
 New-Alias -Name gs -Value _gs
 
+# Antigravity CLI autocompletion
+if (Get-Command agy -ErrorAction SilentlyContinue) {
+    try {
+        agy completion powershell | Out-String | Invoke-Expression
+    } catch {}
+}
 
 Invoke-Expression (&starship init powershell)
+

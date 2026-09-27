@@ -45,6 +45,40 @@ install_vscode_ubuntu() {
     sudo snap install shfmt
 }
 
+# Ubuntu-specific function to install WezTerm via official APT repository
+install_wezterm_ubuntu() {
+    if command -v wezterm >/dev/null 2>&1; then
+        echo "WezTerm is already installed, skipping..."
+        return 0
+    fi
+
+    echo "Installing WezTerm via APT repository..."
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --dearmor --yes -o /etc/apt/keyrings/wezterm-fury.gpg
+    echo 'deb [signed-by=/etc/apt/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
+    sudo chmod 644 /etc/apt/keyrings/wezterm-fury.gpg
+    sudo apt update
+    sudo apt install -y wezterm
+}
+
+# Ubuntu-specific function to install Antigravity desktop via APT repository
+install_antigravity_ubuntu() {
+    if command -v antigravity >/dev/null 2>&1; then
+        echo "Antigravity is already installed, skipping..."
+        return 0
+    fi
+
+    echo "Installing Antigravity via APT repository..."
+    sudo mkdir -p /etc/apt/keyrings
+    if curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg 2>/dev/null; then
+        echo "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main" | sudo tee /etc/apt/sources.list.d/antigravity.list
+        sudo apt update
+        sudo apt install -y antigravity || echo "⚠️ Antigravity apt package not available; please visit https://antigravity.google to install."
+    else
+        echo "⚠️ Could not add Antigravity apt repository; please visit https://antigravity.google to install."
+    fi
+}
+
 # Override the main install function for Ubuntu
 main_install() {
     check_sudo
@@ -55,13 +89,16 @@ main_install() {
     install_starship
     install_uv
     install_node
+    install_antigravity_cli
 
     if is_wsl; then
-        echo "WSL detected — skipping GUI apps (VSCode, Chrome, Nerd Fonts). Install those on the Windows side."
+        echo "WSL detected — skipping GUI apps (VSCode, Chrome, WezTerm, Antigravity, Nerd Fonts). Install those on the Windows side."
     else
         install_vscode_ubuntu
         install_nerd_fonts
         install_chrome_ubuntu
+        install_wezterm_ubuntu
+        install_antigravity_ubuntu
     fi
 
     setup_dotfiles

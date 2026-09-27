@@ -28,7 +28,7 @@ async def setup() -> None:
                     "set",
                     "org.gnome.Terminal.Legacy.Settings",
                     "shortcuts-enabled",
-                    "true"
+                    "true",
                 ],
                 check=True,
                 capture_output=True,

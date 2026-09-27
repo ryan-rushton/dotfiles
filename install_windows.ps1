@@ -73,11 +73,14 @@ function Install-Applications {
         "CoreyButler.NVMforWindows",
         "Git.Git",
         "GitHub.cli",
+        "Google.Antigravity",
+        "Google.AntigravityCLI",
         "Microsoft.Powershell",
         "Microsoft.VisualStudio.2022.BuildTools",
         "Microsoft.VisualStudioCode",
         "Python.Python.3.14",
-        "Starship.Starship"
+        "Starship.Starship",
+        "wez.wezterm"
     )
     
     # Gaming applications
@@ -217,6 +220,16 @@ function Update-EnvironmentPath {
     $uvBinPath = "$HOME\.local\bin"
     if ((Test-Path $uvBinPath) -and ($env:Path -notlike "*$uvBinPath*")) {
         $env:Path += ";$uvBinPath"
+    }
+
+    $wingetLinksPath = "$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+    if ((Test-Path $wingetLinksPath) -and ($env:Path -notlike "*$wingetLinksPath*")) {
+        $env:Path += ";$wingetLinksPath"
+    }
+
+    $weztermPath = "${env:ProgramFiles}\WezTerm"
+    if ((Test-Path $weztermPath) -and ($env:Path -notlike "*$weztermPath*")) {
+        $env:Path += ";$weztermPath"
     }
 
     $nvmPath = "${env:APPDATA}\nvm"

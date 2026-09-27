@@ -86,11 +86,14 @@ install_cli_packages() {
 install_applications() {
     echo "Installing applications via Homebrew Cask..."
     brew install --cask 1password \
+        antigravity \
+        antigravity-cli \
         discord \
         font-fira-code-nerd-font \
         google-chrome \
         google-drive \
-        visual-studio-code
+        visual-studio-code \
+        wezterm
 }
 
 # Function to setup fzf integration

@@ -55,6 +55,8 @@ This is a cross-platform dotfiles repository that uses Python + uv for configura
   - `zsh.py` - Zsh configuration file symlinking (.zshrc, .zsh_aliases)
   - `starship.py` - Terminal prompt configuration
   - `vscode.py` - Settings and extension management
+  - `antigravity.py` - Antigravity and Antigravity CLI configuration (~/.gemini/antigravity-cli/)
+  - `wezterm.py` - Cross-platform WezTerm terminal configuration (~/.wezterm.lua)
   - `osx.py` - macOS system defaults (Dock, Finder, etc.)
   - `windows.py` - Windows system settings and preferences
   - `terminal.py` - GNOME Terminal and Alacritty configuration (Linux)
@@ -67,6 +69,8 @@ This is a cross-platform dotfiles repository that uses Python + uv for configura
   - `config/vscode/` - VSCode settings and extensions
   - `config/starship/` - Starship prompt configuration
   - `config/powershell/` - PowerShell profiles for Windows
+  - `config/wezterm/` - WezTerm terminal configuration (Lua)
+  - `config/antigravity/` - Antigravity CLI configuration (settings.json)
   - `config/alacritty/` - Alacritty terminal configuration
   - `config/osx/` - macOS system defaults script
   - `config/windows/` - Windows system configuration
@@ -86,10 +90,10 @@ This is a cross-platform dotfiles repository that uses Python + uv for configura
 
 The `src/main.py` file defines which modules run on each platform. WSL is detected separately (via `is_wsl()` — checks `WSL_DISTRO_NAME` env var, falls back to `microsoft` in `/proc/version`) and gets its own trimmed module list:
 
-- **macOS**: git, zsh, starship, vscode, osx
-- **Linux** (native): git, zsh, starship, vscode, terminal, mouse
-- **WSL**: git, zsh, starship — `vscode`, `terminal`, and `mouse` are intentionally excluded (VSCode runs Windows-side via Remote-WSL; GNOME Terminal/Alacritty/gsettings don't apply)
-- **Windows**: git, starship, vscode, windows
+- **macOS**: git, zsh, starship, vscode, antigravity, wezterm, osx
+- **Linux** (native): git, zsh, starship, vscode, antigravity, wezterm, terminal, mouse
+- **WSL**: git, zsh, starship, antigravity — `vscode`, `wezterm`, `terminal`, and `mouse` are intentionally excluded (GUI apps run Windows-side; agy runs inside WSL)
+- **Windows**: git, starship, vscode, antigravity, wezterm, windows
 
 ## Design Principles
 
